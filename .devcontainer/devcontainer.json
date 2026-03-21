@@ -1,0 +1,9 @@
+{
+  "name": "software_engineering_hub",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "software_engineering_hub",
+  "workspaceFolder": "/workspace",
+  "extensions": [
+    "anthropic.claude-code"
+  ]
+}

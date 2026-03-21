@@ -1,0 +1,9 @@
+services:
+  software_engineering_hub:
+    build: .
+    container_name: software_engineering_hub
+    volumes:
+      - .:/workspace
+      - ~/.claude:/root/.claude          # persist Claude Code config & auth
+    stdin_open: true
+    tty: true
