@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Technical Leadership — Critical Incidents</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --white:    #ffffff;
+      --off:      #f8f7f5;
+      --surface:  #f0ede8;
+      --navy:     #0f2444;
+      --navy2:    #1a3a6b;
+      --blue:     #2563eb;
+      --text:     #111111;
+      --sub:      #374151;
+      --muted:    #6b7280;
+      --dim:      #d1d5db;
+      --border:   rgba(0,0,0,0.07);
+      --border2:  rgba(0,0,0,0.12);
+      --red:      #dc2626;
+      --red-bg:   rgba(220,38,38,0.07);
+      --red-bd:   rgba(220,38,38,0.20);
+      --amber:    #b45309;
+      --amber-bg: rgba(180,83,9,0.07);
+      --amber-bd: rgba(180,83,9,0.20);
+      --green:    #047857;
+      --green-bg: rgba(4,120,87,0.07);
+      --green-bd: rgba(4,120,87,0.20);
+      --teal:     #0d7490;
+      --teal-bg:  rgba(13,116,144,0.07);
+      --teal-bd:  rgba(13,116,144,0.20);
+    }
+
+    html, body {
+      width: 100%; height: 100vh;
+      overflow: hidden;
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--white);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ══════════════════════
+       TITLE SLIDE — navy split
+    ══════════════════════ */
+    #title-panel {
+      position: fixed; inset: 0; z-index: 0;
+      display: flex;
+      opacity: 0; transition: opacity 0.45s ease;
+      pointer-events: none;
+    }
+    body.on-title #title-panel { opacity: 1; }
+
+    .tp-dark {
+      width: 58%; height: 100%;
+      background: var(--navy);
+      position: relative; overflow: hidden;
+    }
+    .tp-dark::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 70% at 110% 50%, rgba(37,99,235,0.18) 0%, transparent 65%);
+    }
+
+    .tp-light {
+      flex: 1; height: 100%;
+      background: var(--off);
+    }
+
+    /* SVG inside dark panel */
+    #title-svg {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      opacity: 0.18;
+    }
+
+    /* ── Content bg ── */
+    #content-bg {
+      position: fixed; inset: 0; z-index: 0;
+      background: var(--white);
+    }
+
+    /* Title panel must sit above content-bg */
+    #title-panel { z-index: 1; }
+
+    /* ── Shell ── */
+    #shell {
+      position: relative; z-index: 2;
+      display: flex; flex-direction: column;
+      height: 100vh;
+    }
+
+    /* ── Top bar ── */
+    #topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 56px; height: 52px;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .tb-l { display: flex; align-items: center; gap: 13px; }
+    .tb-pip { width: 2px; height: 14px; background: var(--navy2); border-radius: 1px; }
+
+    .tb-title {
+      font-size: 10px; font-weight: 600; letter-spacing: 2.5px;
+      text-transform: uppercase; color: var(--muted);
+    }
+
+    .tb-r {
+      font-size: 10px; font-weight: 500; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--sub);
+    }
+
+    /* ── Progress ── */
+    #prog { height: 2px; background: var(--dim); flex-shrink: 0; }
+    #prog-fill { height: 100%; background: var(--navy2); transition: width 0.4s ease; }
+
+    /* ── Deck ── */
+    #deck { flex: 1; position: relative; overflow: hidden; }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      padding: 40px 56px 36px;
+      opacity: 0; transform: translateX(24px);
+      transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94);
+      pointer-events: none;
+    }
+    .slide.on  { opacity: 1; transform: translateX(0); pointer-events: all; }
+    .slide.out { opacity: 0; transform: translateX(-24px); }
+
+    /* Title slide layout */
+    .s-title {
+      flex-direction: row; align-items: stretch;
+      padding: 0;
+    }
+
+    .title-left {
+      width: 58%; padding: 56px 64px;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+
+    .title-right {
+      flex: 1; padding: 56px 48px;
+      display: flex; flex-direction: column; justify-content: center;
+      background: transparent;
+    }
+
+    /* ── Title typography ── */
+    .overline {
+      font-size: 10px; font-weight: 600; letter-spacing: 4px;
+      text-transform: uppercase; color: rgba(255,255,255,0.80);
+      margin-bottom: 24px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .overline::before { content: ''; width: 24px; height: 1px; background: rgba(255,255,255,0.6); }
+
+    h1 {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 76px; font-weight: 400;
+      line-height: 1.06; letter-spacing: -1.5px;
+      color: #ffffff; margin-bottom: 28px;
+    }
+    h1 em { font-style: italic; color: #93c5fd; }
+
+    .lead-lg {
+      font-size: 16px; font-weight: 300;
+      color: rgba(255,255,255,0.85); line-height: 1.8;
+    }
+
+    /* Right panel content (title slide) */
+    .title-module {
+      font-size: 11px; font-weight: 600; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--navy2);
+      margin-bottom: 28px;
+    }
+
+    .title-points {
+      list-style: none; display: flex; flex-direction: column; gap: 16px;
+    }
+
+    .title-points li {
+      display: flex; align-items: flex-start; gap: 12px;
+      font-size: 15px; font-weight: 400; color: var(--text);
+      line-height: 1.5;
+    }
+
+    .title-points li::before {
+      content: ''; flex-shrink: 0;
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--navy2); margin-top: 6px;
+    }
+
+    /* ── Content slides ── */
+    .s-head { flex-shrink: 0; margin-bottom: 16px; }
+
+    .s-tag {
+      display: block; font-size: 9px; font-weight: 700;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: var(--navy2); margin-bottom: 10px;
+      padding-left: 12px;
+      border-left: 2px solid var(--navy2);
+    }
+
+    h2 {
+      font-size: 42px; font-weight: 700;
+      letter-spacing: -1px; color: var(--navy);
+      line-height: 1.1; margin-bottom: 10px;
+    }
+
+    .lead {
+      font-size: 16px; font-weight: 400;
+      color: var(--sub); line-height: 1.75; max-width: 840px;
+    }
+
+    /* ── Cards ── */
+    .area { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+    .g3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; flex: 1; }
+    .g2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; flex: 1; }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border2);
+      border-top: 3px solid;
+      border-radius: 4px; padding: 24px 22px;
+      display: flex; flex-direction: column;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+
+    .c-navy  { border-top-color: var(--navy2); }
+    .c-red   { border-top-color: var(--red); }
+    .c-amber { border-top-color: var(--amber); }
+    .c-green { border-top-color: var(--green); }
+    .c-teal  { border-top-color: var(--teal); }
+    .c-grey  { border-top-color: var(--muted); }
+
+    .badge {
+      display: inline-block; font-size: 9px; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 3px 9px; border-radius: 2px;
+      margin-bottom: 12px; align-self: flex-start;
+    }
+    .bd-n { background: rgba(15,36,68,0.07);  color: var(--navy2); border: 1px solid rgba(15,36,68,0.15); }
+    .bd-r { background: var(--red-bg);   color: var(--red);   border: 1px solid var(--red-bd); }
+    .bd-a { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-bd); }
+    .bd-g { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-bd); }
+    .bd-t { background: var(--teal-bg);  color: var(--teal);  border: 1px solid var(--teal-bd); }
+    .bd-s { background: rgba(156,163,175,0.12); color: var(--sub); border: 1px solid var(--border2); }
+
+    .card h3 { font-size: 16px; font-weight: 600; color: var(--navy); margin-bottom: 10px; line-height: 1.3; }
+    .card p  { font-size: 14px; color: var(--sub); line-height: 1.75; font-weight: 400; flex: 1; }
+
+    /* ── Timeline ── */
+    .tl { flex: 1; display: flex; flex-direction: column; margin-top: 4px; overflow: hidden; }
+
+    .tl-row { display: grid; grid-template-columns: 72px 1fr; gap: 0 20px; flex: 1; }
+    .tl-l   { display: flex; flex-direction: column; align-items: center; }
+
+    .tl-chip {
+      width: 64px; height: 30px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 3px; font-size: 9px; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase; flex-shrink: 0;
+    }
+    .tc-r { background: var(--red-bg);   color: var(--red);   border: 1px solid var(--red-bd); }
+    .tc-a { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-bd); }
+    .tc-b { background: rgba(15,36,68,0.07); color: var(--navy2); border: 1px solid rgba(15,36,68,0.15); }
+    .tc-g { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-bd); }
+
+    .tl-wire { width: 1px; flex: 1; background: rgba(0,0,0,0.18); margin: 4px 0; min-height: 10px; }
+    .tl-row:last-child .tl-wire { display: none; }
+
+    .tl-body  { padding: 2px 0 8px; }
+    .tl-body h4 { font-size: 17px; font-weight: 600; color: var(--navy); margin-bottom: 6px; }
+    .tl-body p  { font-size: 14px; color: var(--sub); line-height: 1.7; font-weight: 400; }
+
+    /* ── Comms ── */
+    .comms { flex: 1; display: flex; flex-direction: column; gap: 12px; margin-top: 12px; }
+    .cm-row { display: grid; grid-template-columns: 66px 1fr; gap: 14px; align-items: stretch; flex: 1; }
+
+    .cm-stamp {
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; border-radius: 3px; border: 1px solid;
+      font-size: 9px; font-weight: 700; letter-spacing: 0.5px;
+      text-transform: uppercase; line-height: 1.5; padding: 8px 4px;
+    }
+    .cs-r { color: var(--red);   border-color: var(--red-bd);   background: var(--red-bg); }
+    .cs-a { color: var(--amber); border-color: var(--amber-bd); background: var(--amber-bg); }
+    .cs-g { color: var(--green); border-color: var(--green-bd); background: var(--green-bg); }
+
+    .cm-body {
+      background: var(--off); border: 1px solid var(--border2);
+      border-radius: 3px; padding: 16px 22px;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .cm-type {
+      font-size: 10px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--sub); margin-bottom: 8px;
+    }
+    .cm-body p { font-size: 16px; color: var(--text); line-height: 1.65; font-weight: 400; }
+    .cm-body strong { color: var(--navy2); font-weight: 600; }
+
+    /* ── Metrics ── */
+    .metrics {
+      display: grid; grid-template-columns: repeat(4,1fr);
+      gap: 12px; flex: 1; margin-top: 16px; margin-bottom: 14px;
+    }
+
+    .mc {
+      background: var(--white); border: 1px solid var(--border2);
+      border-radius: 4px; padding: 0 20px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      position: relative;
+    }
+    .mc::after {
+      content: ''; position: absolute;
+      bottom: 0; left: 0; right: 0; height: 2px;
+      background: var(--navy2); border-radius: 0 0 4px 4px;
+    }
+
+    .mv {
+      font-size: 64px; font-weight: 700;
+      letter-spacing: -3px; color: var(--navy);
+      line-height: 1; margin-bottom: 16px;
+    }
+    .mv span { color: var(--blue); }
+
+    .md { width: 28px; height: 2px; background: var(--navy2); margin: 0 auto 16px; }
+    .ml { font-size: 13px; color: var(--text); line-height: 1.5; font-weight: 400; }
+
+    /* ── Info bar ── */
+    .infobar {
+      flex-shrink: 0; margin-top: 12px;
+      padding: 13px 20px;
+      background: var(--off); border: 1px solid var(--border2);
+      border-left: 3px solid var(--navy2);
+      border-radius: 3px;
+      font-size: 14px; font-weight: 400; color: var(--sub); line-height: 1.6;
+    }
+    .infobar strong { color: var(--navy2); font-weight: 600; }
+
+    /* ── Bottom bar ── */
+    #bottombar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 56px; height: 52px;
+      background: var(--white);
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .dots { display: flex; gap: 6px; align-items: center; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--dim); cursor: pointer; transition: all 0.2s; }
+    .dot.on { background: var(--navy2); width: 16px; border-radius: 3px; }
+
+    #ctr { font-size: 11px; font-weight: 500; color: var(--muted); letter-spacing: 0.5px; }
+
+    .btns { display: flex; gap: 8px; }
+    .btn {
+      height: 30px; padding: 0 18px;
+      border-radius: 3px; border: 1px solid var(--border2);
+      background: var(--white); color: var(--sub);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 12px; font-weight: 500; cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn:hover:not(:disabled) { background: var(--navy2); border-color: var(--navy2); color: #fff; }
+    .btn:disabled { opacity: 0.2; cursor: default; }
+
+    .btn-pdf {
+      height: 30px; padding: 0 16px;
+      border-radius: 3px; border: 1px solid rgba(15,36,68,0.25);
+      background: var(--navy); color: #fff;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 11px; font-weight: 600; cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: all 0.15s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .btn-pdf:hover { background: var(--navy2); border-color: var(--navy2); }
+
+    /* ── Print / PDF ── */
+    @media print {
+      @page { size: landscape; margin: 0; }
+      html, body { width: 100%; height: 100%; overflow: visible; }
+      #title-panel, #content-bg { display: none; }
+      #topbar, #prog, #bottombar { display: none; }
+      #deck { position: static; height: auto; overflow: visible; }
+      .slide {
+        position: relative; inset: auto;
+        opacity: 1 !important; transform: none !important;
+        pointer-events: all;
+        width: 100vw; height: 100vh;
+        page-break-after: always;
+        break-after: page;
+        display: flex !important;
+        background: #fff;
+      }
+      /* Title slide print: show dark left panel via background */
+      .s-title .title-left {
+        background: #0f2444;
+      }
+      .s-title .title-right {
+        background: #f8f7f5;
+      }
+    }
+  </style>
+</head>
+<body class="on-title">
+
+<!-- Title split panel -->
+<div id="title-panel">
+  <div class="tp-dark">
+    <svg id="title-svg" viewBox="0 0 840 900" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <!-- Abstract topographic lines -->
+      <path d="M-40,140 Q200,100 420,160 Q640,220 880,140" fill="none" stroke="white" stroke-width="1.2"/>
+      <path d="M-40,220 Q200,170 440,240 Q660,310 880,220" fill="none" stroke="white" stroke-width="1.2"/>
+      <path d="M-40,310 Q210,250 460,330 Q680,410 880,310" fill="none" stroke="white" stroke-width="1"/>
+      <path d="M-40,420 Q220,340 490,430 Q710,520 880,420" fill="none" stroke="white" stroke-width="1"/>
+      <path d="M-40,550 Q230,450 510,545 Q730,640 880,550" fill="none" stroke="white" stroke-width="0.8"/>
+      <path d="M-40,700 Q240,580 530,670 Q750,760 880,700" fill="none" stroke="white" stroke-width="0.8"/>
+      <path d="M-40,860 Q250,720 550,810 Q770,900 880,860" fill="none" stroke="white" stroke-width="0.6"/>
+      <!-- Grid -->
+      <line x1="200" y1="0" x2="200" y2="900" stroke="white" stroke-width="0.5" opacity="0.2"/>
+      <line x1="500" y1="0" x2="500" y2="900" stroke="white" stroke-width="0.5" opacity="0.15"/>
+      <line x1="750" y1="0" x2="750" y2="900" stroke="white" stroke-width="0.5" opacity="0.10"/>
+      <!-- Nodes -->
+      <circle cx="200" cy="240" r="4" fill="white" opacity="0.6"/>
+      <circle cx="500" cy="330" r="5" fill="white" opacity="0.7"/>
+      <circle cx="750" cy="220" r="3" fill="white" opacity="0.4"/>
+      <circle cx="200" cy="545" r="3" fill="white" opacity="0.4"/>
+      <circle cx="500" cy="670" r="4" fill="white" opacity="0.5"/>
+      <!-- Connections -->
+      <line x1="200" y1="240" x2="500" y2="330" stroke="white" stroke-width="0.8" opacity="0.3"/>
+      <line x1="500" y1="330" x2="750" y2="220" stroke="white" stroke-width="0.8" opacity="0.25"/>
+      <line x1="500" y1="330" x2="500" y2="670" stroke="white" stroke-width="0.8" opacity="0.2"/>
+      <line x1="200" y1="545" x2="500" y2="670" stroke="white" stroke-width="0.8" opacity="0.2"/>
+    </svg>
+  </div>
+  <div class="tp-light"></div>
+</div>
+
+<div id="content-bg"></div>
+
+<div id="shell">
+
+  <div id="topbar">
+    <div class="tb-l">
+      <div class="tb-pip"></div>
+      <span class="tb-title">Software Engineering Manager · Interview</span>
+    </div>
+    <span class="tb-r">Technical Leadership</span>
+  </div>
+
+  <div id="prog"><div id="prog-fill"></div></div>
+
+  <div id="deck">
+
+    <!-- SLIDE 1 — Title -->
+    <div class="slide s-title on" data-i="0">
+      <div class="title-left">
+        <div class="overline">Technical Leadership</div>
+        <h1>Leading Through<br/><em>Critical<br/>Incidents</em></h1>
+        <p class="lead-lg">How a Software Engineering Manager establishes command, drives recovery, and builds lasting operational resilience.</p>
+      </div>
+      <div class="title-right">
+        <div class="title-module">What this covers</div>
+        <ul class="title-points">
+          <li>War Room roles and command structure</li>
+          <li>Incident response timeline and decision gates</li>
+          <li>Stakeholder communication under pressure</li>
+          <li>Engineering maturity metrics</li>
+          <li>Blameless post-mortem process</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SLIDE 2 — Challenge -->
+    <div class="slide" data-i="1">
+      <div class="s-head">
+        <span class="s-tag">The Challenge</span>
+        <h2>When Production Goes Down</h2>
+        <p class="lead">The manager's role is not to fix the code — it is to create the conditions for the team to fix it fast, with full accountability to stakeholders.</p>
+      </div>
+      <div class="area">
+        <div class="g3" style="margin-bottom:0;">
+          <div class="card c-red">
+            <div class="badge bd-r">P1 · Revenue</div>
+            <h3>Payment Outage</h3>
+            <p>Transaction failures at checkout. Every minute of downtime is direct revenue loss and merchant churn risk across the platform.</p>
+          </div>
+          <div class="card c-amber">
+            <div class="badge bd-a">P1 · Security</div>
+            <h3>Auth / IAM Failure</h3>
+            <p>RBAC misconfiguration causing access denial or unintended privilege escalation across merchant and admin portals.</p>
+          </div>
+          <div class="card c-navy">
+            <div class="badge bd-n">P1 · Stability</div>
+            <h3>Deploy Regression</h3>
+            <p>Bad GitLab pipeline promotion to production. Service degraded, rollback blocked by an in-flight data migration.</p>
+          </div>
+        </div>
+        <div class="infobar">
+          Detected via <strong>Datadog APM alerts</strong> and <strong>New Relic synthetic monitors</strong>. All P1 incidents immediately trigger war room protocol.
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3 — War Room -->
+    <div class="slide" data-i="2">
+      <div class="s-head">
+        <span class="s-tag">Framework</span>
+        <h2>War Room — Roles &amp; Ownership</h2>
+        <p class="lead">Clear role assignment within the first two minutes eliminates confusion under pressure. Everyone has exactly one job.</p>
+      </div>
+      <div class="area">
+        <div class="g2">
+          <div class="card c-navy">
+            <div class="badge bd-n">Incident Commander</div>
+            <h3>Engineering Manager</h3>
+            <p>Owns the timeline, decisions, and escalation path. Does not debug. Keeps the team unblocked and communicates on a strict 10-minute cadence to all stakeholders.</p>
+          </div>
+          <div class="card c-teal">
+            <div class="badge bd-t">Technical Lead</div>
+            <h3>Senior / Staff Engineer</h3>
+            <p>Drives root cause analysis and owns the technical fix. Deploys via GitLab pipeline. Reports status to Incident Commander at every decision point.</p>
+          </div>
+          <div class="card c-amber">
+            <div class="badge bd-a">Comms Lead</div>
+            <h3>EM or Senior Engineer</h3>
+            <p>Single source of truth for product, operations, and leadership. Owns Slack updates and status page. Never contradicts the Incident Commander.</p>
+          </div>
+          <div class="card c-grey">
+            <div class="badge bd-s">Scribe</div>
+            <h3>Any Assigned Engineer</h3>
+            <p>Logs every action and exact timestamp in real time. This document is the raw input for the post-mortem. No detail is too small to capture.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4 — Timeline -->
+    <div class="slide" data-i="3">
+      <div class="s-head">
+        <span class="s-tag">Execution</span>
+        <h2>Incident Response Timeline</h2>
+        <p class="lead">Four disciplined phases from first alert to full resolution — with clear ownership and time-boxed decision gates at each stage.</p>
+      </div>
+      <div class="tl">
+        <div class="tl-row">
+          <div class="tl-l">
+            <div class="tl-chip tc-r">T + 0</div>
+            <div class="tl-wire"></div>
+          </div>
+          <div class="tl-body">
+            <h4>Detect &amp; Declare</h4>
+            <p>Datadog alert fires. EM declares incident severity (P1/P2). War room channel opened. Roles assigned. Scribe begins logging immediately.</p>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-l">
+            <div class="tl-chip tc-a">T + 5</div>
+            <div class="tl-wire"></div>
+          </div>
+          <div class="tl-body">
+            <h4>Triage &amp; Contain</h4>
+            <p>Blast radius identified. Affected service isolated. Circuit breaker or traffic shift applied where possible. First stakeholder update sent.</p>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-l">
+            <div class="tl-chip tc-b">T + 20</div>
+            <div class="tl-wire"></div>
+          </div>
+          <div class="tl-body">
+            <h4>Diagnose &amp; Fix</h4>
+            <p>Root cause identified via Datadog APM and New Relic traces. Fix deployed through GitLab with emergency approval gate. Canary validated before full rollout.</p>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-l">
+            <div class="tl-chip tc-g">T + 35</div>
+            <div class="tl-wire"></div>
+          </div>
+          <div class="tl-body">
+            <h4>Verify &amp; Close</h4>
+            <p>Full traffic restored. SLO recovery confirmed in Datadog. All-clear communicated to stakeholders. Post-mortem scheduled within 24 hours.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5 — Comms -->
+    <div class="slide" data-i="4">
+      <div class="s-head">
+        <span class="s-tag">Communication</span>
+        <h2>What to Say &amp; When</h2>
+        <p class="lead">Silence is the worst response. Structured, proactive updates preserve leadership trust and reduce escalation pressure throughout the incident lifecycle.</p>
+      </div>
+      <div class="comms">
+        <div class="cm-row">
+          <div class="cm-stamp cs-r">T+5<br/>Initial</div>
+          <div class="cm-body">
+            <div class="cm-type">First Alert — Acknowledge</div>
+            <p>"We are aware of an issue affecting <strong>[service]</strong>. Engineers are actively investigating. Next update in 15 minutes."</p>
+          </div>
+        </div>
+        <div class="cm-row">
+          <div class="cm-stamp cs-a">T+20<br/>Progress</div>
+          <div class="cm-body">
+            <div class="cm-type">Progress Update — Root Cause Identified</div>
+            <p>"Root cause identified as <strong>[X]</strong>. Fix is deploying now. Estimated recovery in ~15 minutes. Affected scope: <strong>[area]</strong>."</p>
+          </div>
+        </div>
+        <div class="cm-row">
+          <div class="cm-stamp cs-g">T+35<br/>Resolved</div>
+          <div class="cm-body">
+            <div class="cm-type">Resolution — Close Out</div>
+            <p>"Service fully restored at <strong>[time]</strong>. All systems nominal. Full post-mortem with action items to follow within <strong>24 hours</strong>."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6 — Metrics -->
+    <div class="slide" data-i="5">
+      <div class="s-head">
+        <span class="s-tag">Outcomes</span>
+        <h2>Engineering Maturity — Key Metrics</h2>
+        <p class="lead">What good incident management looks like in a payment-grade environment. These are targets the team is held accountable to, not aspirational benchmarks.</p>
+      </div>
+      <div class="metrics">
+        <div class="mc">
+          <div class="mv"><span>&lt;5</span> min</div>
+          <div class="md"></div>
+          <div class="ml">Mean Time<br/>to Detect</div>
+        </div>
+        <div class="mc">
+          <div class="mv"><span>&lt;30</span> min</div>
+          <div class="md"></div>
+          <div class="ml">Mean Time<br/>to Recover</div>
+        </div>
+        <div class="mc">
+          <div class="mv"><span>100</span>%</div>
+          <div class="md"></div>
+          <div class="ml">Post-Mortems<br/>Completed</div>
+        </div>
+        <div class="mc">
+          <div class="mv"><span>0</span></div>
+          <div class="md"></div>
+          <div class="ml">Repeat Incidents<br/>Same Root Cause</div>
+        </div>
+      </div>
+      <div class="infobar">
+        Tracked via <strong>Datadog SLO dashboards</strong> · <strong>New Relic synthetic alerts</strong> · <strong>DORA metrics in GitLab CI</strong>
+      </div>
+    </div>
+
+    <!-- SLIDE 7 — Post-Mortem -->
+    <div class="slide" data-i="6">
+      <div class="s-head">
+        <span class="s-tag">Learning &amp; Prevention</span>
+        <h2>Blameless Post-Mortem</h2>
+        <p class="lead">The incident is only half the work. The post-mortem converts a production failure into a structural, permanent improvement to the system.</p>
+      </div>
+      <div class="area">
+        <div class="g3" style="margin-bottom:0;">
+          <div class="card c-navy">
+            <div class="badge bd-n">Step 01</div>
+            <h3>What Happened</h3>
+            <p>Timestamped event reconstruction. No blame. Focus exclusively on system and process failures — not individual mistakes or judgement calls made under pressure.</p>
+          </div>
+          <div class="card c-teal">
+            <div class="badge bd-t">Step 02</div>
+            <h3>Root Cause Analysis</h3>
+            <p>5 Whys or fishbone analysis. Distinguish the proximate trigger from the underlying systemic cause that allowed the failure to reach production.</p>
+          </div>
+          <div class="card c-green">
+            <div class="badge bd-g">Step 03</div>
+            <h3>Action Items</h3>
+            <p>Assigned owners, firm deadlines, tracked as GitLab issues. Progress reviewed and reported in the following sprint retrospective without exception.</p>
+          </div>
+        </div>
+        <div class="infobar">
+          <strong>Principle:</strong> Every incident is a signal — it reveals exactly where the system and process need to improve. Treat it as an investment, not a cost.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="bottombar">
+    <div class="dots" id="dots"></div>
+    <span id="ctr">1 / 7</span>
+    <div class="btns">
+      <button class="btn-pdf" onclick="exportPDF()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export PDF
+      </button>
+      <button class="btn" id="bp" onclick="go(-1)" disabled>&#8592; Prev</button>
+      <button class="btn" id="bn" onclick="go(1)">Next &#8594;</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let cur = 0;
+  const slides = [...document.querySelectorAll('.slide')];
+  const N = slides.length;
+  const dotsEl = document.getElementById('dots');
+
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' on' : '');
+    d.onclick = () => goTo(i);
+    dotsEl.appendChild(d);
+  });
+
+  function render() {
+    document.getElementById('prog-fill').style.width = ((cur + 1) / N * 100).toFixed(2) + '%';
+    document.getElementById('ctr').textContent = `${cur + 1} / ${N}`;
+    document.getElementById('bp').disabled = cur === 0;
+    document.getElementById('bn').disabled = cur === N - 1;
+    dotsEl.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('on', i === cur));
+    document.body.classList.toggle('on-title', cur === 0);
+  }
+
+  function goTo(next) {
+    if (next < 0 || next >= N || next === cur) return;
+    slides[cur].classList.remove('on');
+    slides[cur].classList.add('out');
+    const prev = cur; cur = next;
+    setTimeout(() => {
+      slides[prev].classList.remove('out');
+      slides[cur].classList.add('on');
+      render();
+    }, 160);
+  }
+
+  function go(d) { goTo(cur + d); }
+
+  function exportPDF() {
+    // Make all slides visible for print
+    slides.forEach(s => {
+      s.style.opacity = '1';
+      s.style.transform = 'none';
+      s.style.position = 'relative';
+      s.style.pointerEvents = 'all';
+    });
+    window.print();
+    // Restore after print dialog closes
+    setTimeout(() => {
+      slides.forEach((s, i) => {
+        s.style.opacity = '';
+        s.style.transform = '';
+        s.style.position = '';
+        s.style.pointerEvents = '';
+        if (i !== cur) { s.classList.remove('on'); }
+      });
+      render();
+    }, 1000);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.code === 'ArrowRight' || e.code === 'Space') go(1);
+    if (e.code === 'ArrowLeft') go(-1);
+  });
+
+  render();
+</script>
+</body>
+</html>
