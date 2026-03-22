@@ -745,42 +745,59 @@
     btn.textContent = 'Exporting…';
 
     const { jsPDF } = window.jspdf;
-    const deck  = document.getElementById('deck');
-    const rect  = deck.getBoundingClientRect();
-    const w = Math.round(rect.width);
-    const h = Math.round(rect.height);
-
-    const pdf = new jsPDF({ orientation: w >= h ? 'landscape' : 'portrait', unit: 'px', format: [w, h] });
+    const deck = document.getElementById('deck');
+    const deckRect = deck.getBoundingClientRect();
+    const pageW = Math.round(deckRect.width);
 
     const savedCur = cur;
     const savedOnTitle = document.body.classList.contains('on-title');
+    let pdf = null;
 
     for (let i = 0; i < slides.length; i++) {
-      // Show only this slide
-      slides.forEach((s, j) => {
-        s.style.position  = 'absolute';
-        s.style.opacity   = j === i ? '1' : '0';
-        s.style.transform = 'none';
-        s.style.overflow  = 'visible';
-      });
+      const slide = slides[i];
 
-      // Drive the title-panel visibility via the body class (same as normal navigation)
-      if (i === 0) {
-        document.body.classList.add('on-title');
-      } else {
-        document.body.classList.remove('on-title');
-      }
+      // Hide all slides, then measure this slide's natural content height
+      slides.forEach(s => { s.style.opacity = '0'; s.style.transform = 'none'; });
 
-      // Wait two frames for styles to settle
+      // Temporarily flow the slide to get its natural height
+      slide.style.position      = 'relative';
+      slide.style.inset         = 'auto';
+      slide.style.width         = pageW + 'px';
+      slide.style.height        = 'auto';
+      slide.style.justifyContent = 'flex-start';
+      slide.style.overflowY     = 'visible';
+
+      await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+      const pageH = Math.round(slide.offsetHeight);
+
+      // Now reposition for capture: pin to top of deck, exact content height
+      slide.style.position      = 'absolute';
+      slide.style.inset         = 'auto';
+      slide.style.top           = '0';
+      slide.style.left          = '0';
+      slide.style.width         = pageW + 'px';
+      slide.style.height        = pageH + 'px';
+      slide.style.justifyContent = 'flex-start';
+      slide.style.overflowY     = 'visible';
+      slide.style.opacity       = '1';
+
+      // Drive title-panel visibility
+      if (i === 0) document.body.classList.add('on-title');
+      else         document.body.classList.remove('on-title');
+
+      // Temporarily shrink the deck so the capture rect matches content height
+      deck.style.height   = pageH + 'px';
+      deck.style.overflow = 'visible';
+
       await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
 
-      // Capture document root clipped to deck rect — fixed elements (title-panel) are included
+      const captureRect = deck.getBoundingClientRect();
       const canvas = await html2canvas(document.documentElement, {
         scale: 2,
-        x: rect.left,
-        y: rect.top,
-        width: w,
-        height: h,
+        x: Math.round(captureRect.left),
+        y: Math.round(captureRect.top),
+        width:  pageW,
+        height: pageH,
         windowWidth:  window.innerWidth,
         windowHeight: window.innerHeight,
         useCORS: true,
@@ -789,19 +806,33 @@
         logging: false
       });
 
-      if (i > 0) pdf.addPage([w, h]);
-      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, w, h);
+      // Restore deck
+      deck.style.height   = '';
+      deck.style.overflow = '';
+
+      // Restore slide styles
+      slide.style.position       = '';
+      slide.style.inset          = '';
+      slide.style.top            = '';
+      slide.style.left           = '';
+      slide.style.width          = '';
+      slide.style.height         = '';
+      slide.style.justifyContent = '';
+      slide.style.overflowY      = '';
+      slide.style.opacity        = '';
+
+      if (!pdf) {
+        pdf = new jsPDF({ orientation: pageW >= pageH ? 'landscape' : 'portrait', unit: 'px', format: [pageW, pageH] });
+      } else {
+        pdf.addPage([pageW, pageH]);
+      }
+      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, pageW, pageH);
     }
 
-    // Restore
-    slides.forEach(s => {
-      s.style.position  = '';
-      s.style.opacity   = '';
-      s.style.transform = '';
-      s.style.overflow  = '';
-    });
+    // Restore all slide styles and state
+    slides.forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
     if (savedOnTitle) document.body.classList.add('on-title');
-    else document.body.classList.remove('on-title');
+    else              document.body.classList.remove('on-title');
     cur = savedCur;
     render();
 
