@@ -129,6 +129,7 @@
       position: absolute; inset: 0;
       display: flex; flex-direction: column;
       padding: 40px 56px 36px;
+      overflow-y: auto; overflow-x: hidden;
       opacity: 0; transform: translateX(24px);
       transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94);
       pointer-events: none;
@@ -391,7 +392,7 @@
     @media (max-width: 600px) {
       #bottombar { padding: 0 16px; height: 56px; }
       #topbar { padding: 0 16px; }
-      .slide { padding: 24px 20px 20px; }
+      .slide { padding: 24px 20px 20px; -webkit-overflow-scrolling: touch; }
       .btn { height: 40px; padding: 0 16px; font-size: 14px; }
       .btn-pdf { display: none; }
       #ctr { display: none; }
