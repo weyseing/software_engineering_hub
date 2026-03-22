@@ -12,33 +12,33 @@
 
     :root {
       --white:    #ffffff;
-      --off:      #f8f7f5;
-      --surface:  #f0ede8;
+      --off:      #f1f5f9;
+      --surface:  #e2e8f0;
       --navy:     #0f2444;
-      --navy2:    #1a3a6b;
-      --blue:     #2563eb;
-      --text:     #111111;
-      --sub:      #374151;
-      --muted:    #6b7280;
-      --dim:      #d1d5db;
-      --border:   rgba(0,0,0,0.07);
-      --border2:  rgba(0,0,0,0.12);
+      --navy2:    #1d4ed8;
+      --blue:     #3b82f6;
+      --text:     #0f172a;
+      --sub:      #334155;
+      --muted:    #64748b;
+      --dim:      #94a3b8;
+      --border:   rgba(0,0,0,0.08);
+      --border2:  rgba(0,0,0,0.15);
       --red:      #dc2626;
-      --red-bg:   rgba(220,38,38,0.07);
-      --red-bd:   rgba(220,38,38,0.20);
-      --amber:    #b45309;
-      --amber-bg: rgba(180,83,9,0.07);
-      --amber-bd: rgba(180,83,9,0.20);
-      --green:    #047857;
-      --green-bg: rgba(4,120,87,0.07);
-      --green-bd: rgba(4,120,87,0.20);
-      --teal:     #0d7490;
-      --teal-bg:  rgba(13,116,144,0.07);
-      --teal-bd:  rgba(13,116,144,0.20);
+      --red-bg:   rgba(220,38,38,0.10);
+      --red-bd:   rgba(220,38,38,0.30);
+      --amber:    #d97706;
+      --amber-bg: rgba(217,119,6,0.10);
+      --amber-bd: rgba(217,119,6,0.30);
+      --green:    #059669;
+      --green-bg: rgba(5,150,105,0.10);
+      --green-bd: rgba(5,150,105,0.30);
+      --teal:     #0891b2;
+      --teal-bg:  rgba(8,145,178,0.10);
+      --teal-bd:  rgba(8,145,178,0.30);
     }
 
     html, body {
-      width: 100%; height: 100vh;
+      width: 100%; height: 100vh; height: 100dvh;
       overflow: hidden;
       font-family: 'Inter', system-ui, sans-serif;
       background: var(--white);
@@ -93,7 +93,7 @@
     #shell {
       position: relative; z-index: 2;
       display: flex; flex-direction: column;
-      height: 100vh;
+      height: 100vh; height: 100dvh;
     }
 
     /* ── Top bar ── */
@@ -128,7 +128,9 @@
     .slide {
       position: absolute; inset: 0;
       display: flex; flex-direction: column;
+      justify-content: center;
       padding: 40px 56px 36px;
+      overflow-y: auto; overflow-x: hidden;
       opacity: 0; transform: translateX(24px);
       transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94);
       pointer-events: none;
@@ -211,7 +213,7 @@
 
     h2 {
       font-size: 42px; font-weight: 700;
-      letter-spacing: -1px; color: var(--navy);
+      letter-spacing: -1px; color: var(--navy2);
       line-height: 1.1; margin-bottom: 10px;
     }
 
@@ -221,9 +223,9 @@
     }
 
     /* ── Cards ── */
-    .area { flex: 1; display: flex; flex-direction: column; min-height: 0; }
-    .g3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; flex: 1; }
-    .g2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; flex: 1; }
+    .area { display: flex; flex-direction: column; }
+    .g3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; align-content: start; }
+    .g2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; align-content: start; }
 
     .card {
       background: var(--white);
@@ -247,20 +249,20 @@
       padding: 3px 9px; border-radius: 2px;
       margin-bottom: 12px; align-self: flex-start;
     }
-    .bd-n { background: rgba(15,36,68,0.07);  color: var(--navy2); border: 1px solid rgba(15,36,68,0.15); }
+    .bd-n { background: rgba(29,78,216,0.10);  color: var(--navy2); border: 1px solid rgba(29,78,216,0.25); }
     .bd-r { background: var(--red-bg);   color: var(--red);   border: 1px solid var(--red-bd); }
     .bd-a { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-bd); }
     .bd-g { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-bd); }
     .bd-t { background: var(--teal-bg);  color: var(--teal);  border: 1px solid var(--teal-bd); }
     .bd-s { background: rgba(156,163,175,0.12); color: var(--sub); border: 1px solid var(--border2); }
 
-    .card h3 { font-size: 16px; font-weight: 600; color: var(--navy); margin-bottom: 10px; line-height: 1.3; }
+    .card h3 { font-size: 16px; font-weight: 600; color: var(--navy2); margin-bottom: 10px; line-height: 1.3; }
     .card p  { font-size: 14px; color: var(--sub); line-height: 1.75; font-weight: 400; flex: 1; }
 
     /* ── Timeline ── */
-    .tl { flex: 1; display: flex; flex-direction: column; margin-top: 4px; overflow: hidden; }
+    .tl { display: flex; flex-direction: column; margin-top: 4px; gap: 0; }
 
-    .tl-row { display: grid; grid-template-columns: 72px 1fr; gap: 0 20px; flex: 1; }
+    .tl-row { display: grid; grid-template-columns: 72px 1fr; gap: 0 20px; }
     .tl-l   { display: flex; flex-direction: column; align-items: center; }
 
     .tl-chip {
@@ -282,8 +284,8 @@
     .tl-body p  { font-size: 14px; color: var(--sub); line-height: 1.7; font-weight: 400; }
 
     /* ── Comms ── */
-    .comms { flex: 1; display: flex; flex-direction: column; gap: 12px; margin-top: 12px; }
-    .cm-row { display: grid; grid-template-columns: 66px 1fr; gap: 14px; align-items: stretch; flex: 1; }
+    .comms { display: flex; flex-direction: column; gap: 12px; margin-top: 12px; }
+    .cm-row { display: grid; grid-template-columns: 66px 1fr; gap: 14px; align-items: stretch; }
 
     .cm-stamp {
       display: flex; align-items: center; justify-content: center;
@@ -310,12 +312,12 @@
     /* ── Metrics ── */
     .metrics {
       display: grid; grid-template-columns: repeat(4,1fr);
-      gap: 12px; flex: 1; margin-top: 16px; margin-bottom: 14px;
+      gap: 12px; margin-top: 16px; margin-bottom: 14px; align-content: start;
     }
 
     .mc {
       background: var(--white); border: 1px solid var(--border2);
-      border-radius: 4px; padding: 0 20px;
+      border-radius: 4px; padding: 20px;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center; text-align: center;
       box-shadow: 0 1px 4px rgba(0,0,0,0.04);
@@ -387,31 +389,18 @@
     }
     .btn-pdf:hover { background: var(--navy2); border-color: var(--navy2); }
 
-    /* ── Print / PDF ── */
-    @media print {
-      @page { size: landscape; margin: 0; }
-      html, body { width: 100%; height: 100%; overflow: visible; }
-      #title-panel, #content-bg { display: none; }
-      #topbar, #prog, #bottombar { display: none; }
-      #deck { position: static; height: auto; overflow: visible; }
-      .slide {
-        position: relative; inset: auto;
-        opacity: 1 !important; transform: none !important;
-        pointer-events: all;
-        width: 100vw; height: 100vh;
-        page-break-after: always;
-        break-after: page;
-        display: flex !important;
-        background: #fff;
-      }
-      /* Title slide print: show dark left panel via background */
-      .s-title .title-left {
-        background: #0f2444;
-      }
-      .s-title .title-right {
-        background: #f8f7f5;
-      }
+    /* ── Mobile ── */
+    @media (max-width: 600px) {
+      #bottombar { padding: 0 16px; height: 56px; }
+      #topbar { padding: 0 16px; }
+      .slide { padding: 24px 20px 20px; -webkit-overflow-scrolling: touch; }
+      .btn { height: 40px; padding: 0 16px; font-size: 14px; }
+      .btn-pdf { display: none; }
+      #ctr { display: none; }
     }
+
+    /* ── PDF export loading state ── */
+    .btn-pdf.exporting { opacity: 0.6; pointer-events: none; cursor: wait; }
   </style>
 </head>
 <body class="on-title">
@@ -701,7 +690,7 @@
     <div class="dots" id="dots"></div>
     <span id="ctr">1 / 7</span>
     <div class="btns">
-      <button class="btn-pdf" onclick="exportPDF()">
+      <button class="btn-pdf" id="btnPdf" onclick="exportPDF()">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Export PDF
       </button>
@@ -712,6 +701,8 @@
 
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
   let cur = 0;
   const slides = [...document.querySelectorAll('.slide')];
@@ -748,32 +739,121 @@
 
   function go(d) { goTo(cur + d); }
 
-  function exportPDF() {
-    // Make all slides visible for print
-    slides.forEach(s => {
-      s.style.opacity = '1';
-      s.style.transform = 'none';
-      s.style.position = 'relative';
-      s.style.pointerEvents = 'all';
-    });
-    window.print();
-    // Restore after print dialog closes
-    setTimeout(() => {
-      slides.forEach((s, i) => {
-        s.style.opacity = '';
-        s.style.transform = '';
-        s.style.position = '';
-        s.style.pointerEvents = '';
-        if (i !== cur) { s.classList.remove('on'); }
+  async function exportPDF() {
+    const btn = document.getElementById('btnPdf');
+    btn.classList.add('exporting');
+    btn.textContent = 'Exporting…';
+
+    const { jsPDF } = window.jspdf;
+    const deck = document.getElementById('deck');
+    const deckRect = deck.getBoundingClientRect();
+    const pageW = Math.round(deckRect.width);
+
+    const savedCur = cur;
+    const savedOnTitle = document.body.classList.contains('on-title');
+    let pdf = null;
+
+    for (let i = 0; i < slides.length; i++) {
+      const slide = slides[i];
+
+      // Hide all slides, then measure this slide's natural content height
+      slides.forEach(s => { s.style.opacity = '0'; s.style.transform = 'none'; });
+
+      // Temporarily flow the slide to get its natural height
+      slide.style.position      = 'relative';
+      slide.style.inset         = 'auto';
+      slide.style.width         = pageW + 'px';
+      slide.style.height        = 'auto';
+      slide.style.justifyContent = 'flex-start';
+      slide.style.overflowY     = 'visible';
+
+      await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+      const pageH = Math.round(slide.offsetHeight);
+
+      // Now reposition for capture: pin to top of deck, exact content height
+      slide.style.position      = 'absolute';
+      slide.style.inset         = 'auto';
+      slide.style.top           = '0';
+      slide.style.left          = '0';
+      slide.style.width         = pageW + 'px';
+      slide.style.height        = pageH + 'px';
+      slide.style.justifyContent = 'flex-start';
+      slide.style.overflowY     = 'visible';
+      slide.style.opacity       = '1';
+
+      // Drive title-panel visibility
+      if (i === 0) document.body.classList.add('on-title');
+      else         document.body.classList.remove('on-title');
+
+      // Temporarily shrink the deck so the capture rect matches content height
+      deck.style.height   = pageH + 'px';
+      deck.style.overflow = 'visible';
+
+      await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+      const captureRect = deck.getBoundingClientRect();
+      const canvas = await html2canvas(document.documentElement, {
+        scale: 2,
+        x: Math.round(captureRect.left),
+        y: Math.round(captureRect.top),
+        width:  pageW,
+        height: pageH,
+        windowWidth:  window.innerWidth,
+        windowHeight: window.innerHeight,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff',
+        logging: false
       });
-      render();
-    }, 1000);
+
+      // Restore deck
+      deck.style.height   = '';
+      deck.style.overflow = '';
+
+      // Restore slide styles
+      slide.style.position       = '';
+      slide.style.inset          = '';
+      slide.style.top            = '';
+      slide.style.left           = '';
+      slide.style.width          = '';
+      slide.style.height         = '';
+      slide.style.justifyContent = '';
+      slide.style.overflowY      = '';
+      slide.style.opacity        = '';
+
+      if (!pdf) {
+        pdf = new jsPDF({ orientation: pageW >= pageH ? 'landscape' : 'portrait', unit: 'px', format: [pageW, pageH] });
+      } else {
+        pdf.addPage([pageW, pageH]);
+      }
+      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, pageW, pageH);
+    }
+
+    // Restore all slide styles and state
+    slides.forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
+    if (savedOnTitle) document.body.classList.add('on-title');
+    else              document.body.classList.remove('on-title');
+    cur = savedCur;
+    render();
+
+    pdf.save('module9-critical-incidents.pdf');
+
+    btn.classList.remove('exporting');
+    btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export PDF`;
   }
 
   document.addEventListener('keydown', e => {
     if (e.code === 'ArrowRight' || e.code === 'Space') go(1);
     if (e.code === 'ArrowLeft') go(-1);
   });
+
+  // Touch swipe support
+  let tx = 0;
+  document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1);
+  }, { passive: true });
 
   render();
 </script>

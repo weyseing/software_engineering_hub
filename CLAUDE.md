@@ -1,94 +1,67 @@
 # Software Engineering Manager — Interview Prep
 
-## Context
-2nd round technical interview for **Software Engineering Manager** role.
-Interviewer is the **Head of Software Engineering** — expects technical credibility, hands-on engineering depth, and strong team execution.
-Use real job experience to showcase technical depth across all modules.
+## Role Context
+- **Position**: Software Engineering Manager — Founding EM
+- **Company**: AirAsia (new team under AirAsia, building a travel aggregation platform)
+- **Product**: Backend API service aggregating flights (multi-airline, not just AirAsia) and hotels → integrated into AirAsia Move app and other travel agency apps. Includes a B2B Agent Portal for travel agents.
+- **Team**: Founding EM hired first → sets tech foundation → hires 4 engineers
+- **Round**: 2nd round technical interview
+- **Interviewer**: Head of Software Engineering — expects technical depth + leadership credibility
+- **Format**: 1 hour, screen-share slides as conversation anchors (not a presentation)
 
-## Background & Tooling
-**Domains:** Payment systems, admin/merchant portals, IAM & RBAC, Agentic AI, data engineering, AWS (ECS/EKS), security, scaling
-**CI/CD:** GitLab CI
-**Monitoring:** Datadog, New Relic
+## Interview Strategy
+**Focus on past real experience.** Every slide backs a real story. No generic best practices.
+Slides are shown on screen share — they guide conversation, not replace it.
+The interviewer will interrupt and dig in. That is expected and good.
 
----
+## Candidate Background
+- **Team size**: Led 13+ engineers across multiple squads (peak)
+- **Domains**: Payment systems · Multi-tenant B2B portals (admin/merchant) · IAM & RBAC · Agentic AI · Data engineering
+- **Cloud**: AWS (ECS/EKS)
+- **CI/CD**: GitLab CI
+- **Monitoring**: Datadog, New Relic
+- **Strongest technical areas**: Payment idempotency / exactly-once semantics · RBAC at scale · Multi-tenant isolation · Event-driven architecture
 
-## Content Modules
+## Slide Deck
 
-### Module 1: System Design & Architecture
-- Payment system: idempotency, retries, exactly-once semantics
-- Multi-tenant design: admin vs merchant portal isolation
-- Event-driven: async payments, reconciliation, audit trails
-- API design: REST vs gRPC, versioning, backward compatibility
+### Single file: `slides/interview-prep.html`
+20 slides across 6 chapters. One continuous deck.
 
-### Module 2: Security Engineering
-- IAM & RBAC: role hierarchy, least privilege
-- Payment security: PCI-DSS, tokenization, encryption
-- AWS security: SCPs, VPC design, Secrets Manager
-- Pipeline security: SAST, DAST, container image scanning (ECR)
+| Chapter | Slides | Content |
+|---|---|---|
+| 1. Who I Am | 1–2 | Title + career snapshot with real metrics |
+| 2. Systems I've Built | 3–6 | Architecture diagram, decisions, hard problem, outcomes |
+| 3. Team I've Led | 7–9 | Squad structure, hiring approach, culture installed |
+| 4. Hard Problems | 10–13 | Payment idempotency (2 slides) + RBAC at scale (2 slides) |
+| 5. Engineering Foundation | 14–16 | CI/CD pipeline, observability, test strategy |
+| 6. Critical Incidents | 17–19 | War room, response timeline, post-mortem |
+| Closing | 20 | Why this role — experience mapped to AirAsia Founding EM |
 
-### Module 3: Cloud & Infrastructure (AWS)
-- ECS vs EKS: trade-offs, when you chose which
-- Container patterns: sidecar, service mesh
-- AWS networking: VPC, ALB/NLB, PrivateLink
-- IaC: Terraform/CDK for payment-grade infra
+### Archived: `slides/module9-critical-incidents.html`
+Original Module 9 deck. Kept for reference. Slides 17–19 in interview-prep.html are derived from it.
 
-### Module 4: GitLab CI/CD
-- Pipeline design for regulated workloads (audit trails, change control)
-- Multi-environment: dev → staging → prod with data isolation
-- Zero-downtime deployments: blue/green, canary with traffic shifting
-- Feature flags for high-risk payment features
-- GitLab-specific: runners, environments, protected branches, approval rules
+## Placeholders to Fill In
+All placeholders are highlighted in amber in the slides. Search for `[` to find them.
 
-### Module 5: Monitoring & Observability (Datadog + New Relic)
-- Datadog: APM, dashboards, alerts, log correlation for payment flows
-- New Relic: browser/synthetic monitoring for merchant/admin portals
-- SLOs/SLIs/SLAs — what "five nines" means in payment context
-- On-call culture, runbooks, incident escalation paths
+| Placeholder | Slide | What to fill |
+|---|---|---|
+| [YOUR NAME] | 1 | Your full name |
+| [YOUR TITLE] | 1 | Current/most recent title |
+| [YOUR COMPANY] | 1, 3 | Company name(s) |
+| [X] engineers | 2 | Peak team size (you said 13+) |
+| [X]M / [X]K | 2, 6 | Transaction/request volumes |
+| [X] squads | 2 | Number of squads led |
+| [SYSTEM NAME] | 3 | Name of your flagship system |
+| [DESCRIBE SYSTEM] | 3 | One-sentence system description |
+| [CONSUMER 1/2/3] | 3 | Apps/clients that consumed your API |
+| [DECISION 1/2/3] | 4 | Your top 3 technical decisions |
+| [HARD PROBLEM] | 5 | Title of your hardest technical problem |
+| [COMPANY/PRODUCT] | 10, 12 | Where these problems occurred |
+| [YOUR SLOS] | 15 | Actual SLOs you held the team to |
+| [STACK DETAILS] | 6, 14 | Your real tech stack |
 
-### Module 6: AI & Data Engineering
-- Data pipelines feeding AI: batch vs streaming, quality gates
-- Agentic AI in production: orchestrator → agent → tool pattern
-- Evaluation: how you measure AI quality beyond accuracy
-- Human-in-the-loop for high-stakes actions (payment/merchant context)
-- Data governance: PII/PCI masking, data contracts
-
-### Module 7: Scaling & Reliability
-- Horizontal scaling on ECS/EKS: practical decisions
-- Database scaling: read replicas, connection pooling (RDS Proxy)
-- Caching: Redis, CDN, invalidation in multi-tenant systems
-- Load testing payment flows: k6/Locust for merchant traffic spikes
-
-### Module 8: Testing & Quality Engineering
-- Testing pyramid for payment flows: unit → integration → contract → E2E
-- Contract testing (Pact) for payment APIs
-- Test data management in PCI-scoped environments
-- Performance testing for merchant portal under peak load
-
-### Module 9: Technical Leadership — Critical Incidents
-- How to run a war room: roles, communication cadence, decision authority
-- Triaging a live payment outage: diagnosis → containment → fix → verify
-- Leading engineers under pressure: keeping focus, avoiding panic fixes
-- Post-mortem culture: blameless, action-oriented, preventing recurrence
-- Stakeholder communication during incidents: what to say, when, to whom
-
-### Module 10: STAR Stories
-- Payment system design/incident
-- IAM/RBAC rollout
-- EKS scaling under pressure
-- GitLab CI/CD transformation
-- AI/data system adoption
-- Critical incident leadership
-
----
-
-## Slide Format (per module)
-| Slide | Purpose |
-|---|---|
-| Architecture diagram | Show the system you built |
-| Decision log | Why this approach over alternatives |
-| Trade-offs | What you gave up, what you gained |
-| Metrics / outcomes | Numbers that prove it worked |
-| Lessons learned | Shows maturity and reflection |
-
-## Build Order
-9 → 1 → 4 → 2 → 3 → 5 → 7 → 8 → 6 → 10
+## Build Notes
+- Template system: Inter + DM Serif Display fonts, CSS custom properties, card/grid/timeline components
+- PDF export: measures natural slide height per page (no whitespace)
+- Component classes: `.card .c-*`, `.g2`, `.g3`, `.tl`, `.metrics`, `.infobar`, `.comms`
+- New in interview-prep: `.ph` (placeholder highlight), `.arch` (architecture diagram), `.split-story`
