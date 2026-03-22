@@ -745,18 +745,18 @@
     btn.textContent = 'Exporting…';
 
     const { jsPDF } = window.jspdf;
-    const deck = document.getElementById('deck');
-    const w = deck.offsetWidth;
-    const h = deck.offsetHeight;
+    const deck  = document.getElementById('deck');
+    const rect  = deck.getBoundingClientRect();
+    const w = Math.round(rect.width);
+    const h = Math.round(rect.height);
 
-    const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [w, h] });
+    const pdf = new jsPDF({ orientation: w >= h ? 'landscape' : 'portrait', unit: 'px', format: [w, h] });
 
     const savedCur = cur;
-    const titleLeft  = document.querySelector('.title-left');
-    const titleRight = document.querySelector('.title-right');
+    const savedOnTitle = document.body.classList.contains('on-title');
 
     for (let i = 0; i < slides.length; i++) {
-      // Show only this slide, freeze all in place
+      // Show only this slide
       slides.forEach((s, j) => {
         s.style.position  = 'absolute';
         s.style.opacity   = j === i ? '1' : '0';
@@ -764,40 +764,44 @@
         s.style.overflow  = 'visible';
       });
 
-      // Bake title-slide background into the left panel for capture
-      if (i === 0 && titleLeft && titleRight) {
-        titleLeft.style.background  = '#0f2444';
-        titleRight.style.background = '#f1f5f9';
+      // Drive the title-panel visibility via the body class (same as normal navigation)
+      if (i === 0) {
+        document.body.classList.add('on-title');
+      } else {
+        document.body.classList.remove('on-title');
       }
 
       // Wait two frames for styles to settle
       await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
 
-      const canvas = await html2canvas(deck, {
+      // Capture document root clipped to deck rect — fixed elements (title-panel) are included
+      const canvas = await html2canvas(document.documentElement, {
         scale: 2,
+        x: rect.left,
+        y: rect.top,
+        width: w,
+        height: h,
+        windowWidth:  window.innerWidth,
+        windowHeight: window.innerHeight,
         useCORS: true,
         allowTaint: true,
         backgroundColor: '#ffffff',
-        logging: false,
-        ignoreElements: el => el.id === 'title-panel'
+        logging: false
       });
 
       if (i > 0) pdf.addPage([w, h]);
       pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, w, h);
-
-      if (i === 0 && titleLeft && titleRight) {
-        titleLeft.style.background  = '';
-        titleRight.style.background = '';
-      }
     }
 
-    // Restore all slide styles
+    // Restore
     slides.forEach(s => {
       s.style.position  = '';
       s.style.opacity   = '';
       s.style.transform = '';
       s.style.overflow  = '';
     });
+    if (savedOnTitle) document.body.classList.add('on-title');
+    else document.body.classList.remove('on-title');
     cur = savedCur;
     render();
 
