@@ -399,31 +399,8 @@
       #ctr { display: none; }
     }
 
-    /* ── Print / PDF ── */
-    @media print {
-      @page { size: landscape; margin: 0; }
-      html, body { width: 100%; height: 100%; overflow: visible; }
-      #title-panel, #content-bg { display: none; }
-      #topbar, #prog, #bottombar { display: none; }
-      #deck { position: static; height: auto; overflow: visible; }
-      .slide {
-        position: relative; inset: auto;
-        opacity: 1 !important; transform: none !important;
-        pointer-events: all;
-        width: 100vw; height: 100vh;
-        page-break-after: always;
-        break-after: page;
-        display: flex !important;
-        background: #fff;
-      }
-      /* Title slide print: show dark left panel via background */
-      .s-title .title-left {
-        background: #0f2444;
-      }
-      .s-title .title-right {
-        background: #f8f7f5;
-      }
-    }
+    /* ── PDF export loading state ── */
+    .btn-pdf.exporting { opacity: 0.6; pointer-events: none; cursor: wait; }
   </style>
 </head>
 <body class="on-title">
@@ -713,7 +690,7 @@
     <div class="dots" id="dots"></div>
     <span id="ctr">1 / 7</span>
     <div class="btns">
-      <button class="btn-pdf" onclick="exportPDF()">
+      <button class="btn-pdf" id="btnPdf" onclick="exportPDF()">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Export PDF
       </button>
@@ -724,6 +701,8 @@
 
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
   let cur = 0;
   const slides = [...document.querySelectorAll('.slide')];
@@ -760,26 +739,72 @@
 
   function go(d) { goTo(cur + d); }
 
-  function exportPDF() {
-    // Make all slides visible for print
-    slides.forEach(s => {
-      s.style.opacity = '1';
-      s.style.transform = 'none';
-      s.style.position = 'relative';
-      s.style.pointerEvents = 'all';
-    });
-    window.print();
-    // Restore after print dialog closes
-    setTimeout(() => {
-      slides.forEach((s, i) => {
-        s.style.opacity = '';
-        s.style.transform = '';
-        s.style.position = '';
-        s.style.pointerEvents = '';
-        if (i !== cur) { s.classList.remove('on'); }
+  async function exportPDF() {
+    const btn = document.getElementById('btnPdf');
+    btn.classList.add('exporting');
+    btn.textContent = 'Exporting…';
+
+    const { jsPDF } = window.jspdf;
+    const deck = document.getElementById('deck');
+    const w = deck.offsetWidth;
+    const h = deck.offsetHeight;
+
+    const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [w, h] });
+
+    const savedCur = cur;
+    const titleLeft  = document.querySelector('.title-left');
+    const titleRight = document.querySelector('.title-right');
+
+    for (let i = 0; i < slides.length; i++) {
+      // Show only this slide, freeze all in place
+      slides.forEach((s, j) => {
+        s.style.position  = 'absolute';
+        s.style.opacity   = j === i ? '1' : '0';
+        s.style.transform = 'none';
+        s.style.overflow  = 'visible';
       });
-      render();
-    }, 1000);
+
+      // Bake title-slide background into the left panel for capture
+      if (i === 0 && titleLeft && titleRight) {
+        titleLeft.style.background  = '#0f2444';
+        titleRight.style.background = '#f1f5f9';
+      }
+
+      // Wait two frames for styles to settle
+      await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+      const canvas = await html2canvas(deck, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff',
+        logging: false,
+        ignoreElements: el => el.id === 'title-panel'
+      });
+
+      if (i > 0) pdf.addPage([w, h]);
+      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, w, h);
+
+      if (i === 0 && titleLeft && titleRight) {
+        titleLeft.style.background  = '';
+        titleRight.style.background = '';
+      }
+    }
+
+    // Restore all slide styles
+    slides.forEach(s => {
+      s.style.position  = '';
+      s.style.opacity   = '';
+      s.style.transform = '';
+      s.style.overflow  = '';
+    });
+    cur = savedCur;
+    render();
+
+    pdf.save('module9-critical-incidents.pdf');
+
+    btn.classList.remove('exporting');
+    btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export PDF`;
   }
 
   document.addEventListener('keydown', e => {
