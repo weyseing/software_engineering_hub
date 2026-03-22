@@ -223,8 +223,8 @@
 
     /* ── Cards ── */
     .area { display: flex; flex-direction: column; }
-    .g3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
-    .g2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
+    .g3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; align-content: start; }
+    .g2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; align-content: start; }
 
     .card {
       background: var(--white);
@@ -311,7 +311,7 @@
     /* ── Metrics ── */
     .metrics {
       display: grid; grid-template-columns: repeat(4,1fr);
-      gap: 12px; margin-top: 16px; margin-bottom: 14px;
+      gap: 12px; margin-top: 16px; margin-bottom: 14px; align-content: start;
     }
 
     .mc {
