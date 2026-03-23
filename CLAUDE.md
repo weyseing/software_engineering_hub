@@ -24,6 +24,8 @@ The interviewer will interrupt and dig in. That is expected and good.
 
 ## Slide Deck
 
+> Note: AirAsia Move is a client app that connects to your product — you are under AirAsia (the parent), not under AirAsia Move.
+
 ### Single file: `slides/interview-prep.html`
 20 slides across 6 chapters. One continuous deck.
 
@@ -47,7 +49,7 @@ All placeholders are highlighted in amber in the slides. Search for `[` to find 
 |---|---|---|
 | [YOUR NAME] | 1 | Your full name |
 | [YOUR TITLE] | 1 | Current/most recent title |
-| [YOUR COMPANY] | 1, 3 | Company name(s) |
+| [YOUR COMPANY] | 1, 3 | Company name(s) from your history |
 | [X] engineers | 2 | Peak team size (you said 13+) |
 | [X]M / [X]K | 2, 6 | Transaction/request volumes |
 | [X] squads | 2 | Number of squads led |
@@ -59,6 +61,10 @@ All placeholders are highlighted in amber in the slides. Search for `[` to find 
 | [COMPANY/PRODUCT] | 10, 12 | Where these problems occurred |
 | [YOUR SLOS] | 15 | Actual SLOs you held the team to |
 | [STACK DETAILS] | 6, 14 | Your real tech stack |
+| [COMPANY] | 8 | Target company (hiring context) |
+| [COMPANY'S PRODUCT] | 20 | One-phrase description of what they're building |
+| [ROLE TITLE AT COMPANY] | 20 | e.g. "Founding EM for Travel Platform" |
+| [What this role delivers] | 20 | Team size, product scope, technical mandate |
 
 ## Build Notes
 - Template system: Inter + DM Serif Display fonts, CSS custom properties, card/grid/timeline components

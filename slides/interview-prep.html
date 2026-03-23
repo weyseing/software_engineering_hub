@@ -44,13 +44,16 @@
       text-transform:uppercase; color:var(--sub); }
     #prog { height:2px; background:var(--dim); flex-shrink:0; }
     #prog-fill { height:100%; background:var(--navy2); transition:width 0.4s ease; }
-    #deck { flex:1; position:relative; overflow:hidden; }
+    #deck { flex:1; position:relative; overflow:hidden; max-width:1280px; width:100%; align-self:center; }
     .slide { position:absolute; inset:0; display:flex; flex-direction:column;
-      justify-content:center; padding:40px 56px 36px;
+      justify-content:flex-start; padding:40px 56px 36px;
       overflow-y:auto; overflow-x:hidden;
       opacity:0; transform:translateX(24px);
       transition:opacity 0.3s ease,transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94);
-      pointer-events:none; }
+      pointer-events:none;
+      background-color:var(--white);
+      background-image:radial-gradient(rgba(15,36,68,0.055) 1px, transparent 1px);
+      background-size:28px 28px; }
     .slide.on  { opacity:1; transform:translateX(0); pointer-events:all; }
     .slide.out { opacity:0; transform:translateX(-24px); }
     .s-title { flex-direction:row; align-items:stretch; padding:0; }
@@ -162,6 +165,80 @@
       transition:all 0.15s; display:flex; align-items:center; gap:6px; }
     .btn-pdf:hover { background:var(--navy2); border-color:var(--navy2); }
     .btn-pdf.exporting { opacity:0.6; pointer-events:none; cursor:wait; }
+    /* ── Slide background variants ── */
+    .s-dark { background-color:#0d1e35; background-image:radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px); background-size:28px 28px; }
+    .s-dark .s-tag { color:rgba(147,197,253,0.7); border-left-color:rgba(147,197,253,0.4); }
+    .s-dark h2 { color:#f1f5f9; }
+    .s-dark .lead { color:rgba(255,255,255,0.68); }
+    .s-dark .infobar { background:rgba(255,255,255,0.04); border-color:rgba(255,255,255,0.08); border-left-color:#60a5fa; color:rgba(255,255,255,0.58); }
+    .s-dark .infobar strong { color:#93c5fd; }
+    .s-dark .mc { background:rgba(255,255,255,0.07); border-color:rgba(255,255,255,0.12); box-shadow:none; }
+    .s-dark .mc::after { background:#3b82f6; }
+    .s-dark .mv { color:#f1f5f9; }
+    .s-dark .mv span { color:#60a5fa; }
+    .s-dark .md { background:#3b82f6; opacity:0.5; }
+    .s-dark .ml { color:rgba(255,255,255,0.55); }
+    .s-tint { background-color:#edf2fb; }
+    .s-geo { background-image:radial-gradient(rgba(15,36,68,0.055) 1px, transparent 1px), radial-gradient(circle at calc(100% + 80px) calc(100% + 80px), transparent 200px, rgba(29,78,216,0.06) 200px, rgba(29,78,216,0.06) 248px, transparent 248px), radial-gradient(circle at calc(100% + 80px) calc(100% + 80px), transparent 300px, rgba(29,78,216,0.04) 300px, rgba(29,78,216,0.04) 340px, transparent 340px); background-size:28px 28px, 100% 100%, 100% 100%; }
+    .s-tint.s-geo { background-color:#edf2fb; background-image:radial-gradient(rgba(15,36,68,0.07) 1px, transparent 1px), radial-gradient(circle at calc(100% + 80px) calc(100% + 80px), transparent 200px, rgba(29,78,216,0.07) 200px, rgba(29,78,216,0.07) 248px, transparent 248px), radial-gradient(circle at calc(100% + 80px) calc(100% + 80px), transparent 300px, rgba(29,78,216,0.05) 300px, rgba(29,78,216,0.05) 340px, transparent 340px); background-size:28px 28px, 100% 100%, 100% 100%; }
+    .s-dark.s-geo { background-color:#0d1e35; background-image:radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), radial-gradient(circle at calc(100% + 80px) calc(100% + 80px), transparent 200px, rgba(147,197,253,0.09) 200px, rgba(147,197,253,0.09) 248px, transparent 248px), radial-gradient(circle at calc(100% + 80px) calc(100% + 80px), transparent 300px, rgba(147,197,253,0.06) 300px, rgba(147,197,253,0.06) 340px, transparent 340px); background-size:28px 28px, 100% 100%, 100% 100%; }
+    /* ── Stat rows — slide 6 ── */
+    .stat-rows { display:flex; flex-direction:column; gap:10px; margin-top:10px; }
+    .stat-row-item { display:flex; align-items:stretch; background:var(--white); border:1px solid var(--border2); border-radius:4px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,0.04); }
+    .sr-val { width:110px; flex-shrink:0; padding:16px 14px; text-align:center; border-right:1px solid var(--border2); display:flex; align-items:center; justify-content:center; }
+    .sr-val .sv { font-size:30px; font-weight:700; line-height:1; color:var(--navy); letter-spacing:-1px; }
+    .sr-val .sv span { color:var(--blue); }
+    .sr-body { flex:1; padding:12px 18px; display:flex; flex-direction:column; justify-content:center; }
+    .sr-body h4 { font-size:14px; font-weight:600; color:var(--navy); margin-bottom:3px; }
+    .sr-body p { font-size:13px; color:var(--sub); line-height:1.5; }
+    .sr-bar { width:5px; flex-shrink:0; }
+    .srb-n { background:var(--navy2); } .srb-t { background:var(--teal); } .srb-g { background:var(--green); } .srb-a { background:var(--amber); }
+    /* ── Horizontal flow — slide 11 ── */
+    .h-flow { display:flex; align-items:stretch; margin-top:12px; }
+    .hf-card { flex:1; padding:20px 18px; background:var(--white); border:1px solid var(--border2); }
+    .hf-card:first-child { border-radius:4px 0 0 4px; }
+    .hf-card:last-child { border-radius:0 4px 4px 0; }
+    .hf-card + .hf-card { border-left:none; }
+    .hf-arrow { width:30px; flex-shrink:0; display:flex; align-items:center; justify-content:center; background:var(--off); border-top:1px solid var(--border2); border-bottom:1px solid var(--border2); color:var(--muted); font-size:18px; font-weight:700; }
+    .hf-step { font-size:9px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:var(--navy2); margin-bottom:8px; display:block; }
+    .hf-card h4 { font-size:14px; font-weight:700; color:var(--navy); margin-bottom:8px; line-height:1.3; }
+    .hf-card p { font-size:13px; color:var(--sub); line-height:1.7; }
+    /* ── Monitoring showcase — slide 15 ── */
+    .mon-stack { display:grid; grid-template-columns:1fr 1fr; gap:0; margin-top:10px; border:1px solid var(--border2); border-radius:4px; overflow:hidden; }
+    .mon-col { padding:20px 22px; background:var(--white); }
+    .mon-col + .mon-col { border-left:1px solid var(--border2); }
+    .mon-tool { display:flex; align-items:center; gap:12px; margin-bottom:14px; padding-bottom:14px; border-bottom:1px solid var(--border2); }
+    .mt-logo { width:38px; height:38px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; flex-shrink:0; }
+    .mt-n { background:var(--navy); color:#fff; }
+    .mt-t { background:var(--teal); color:#fff; }
+    .mt-name { font-size:14px; font-weight:700; color:var(--navy); }
+    .mt-role { font-size:10px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); margin-top:2px; }
+    .mon-items { display:flex; flex-direction:column; gap:8px; }
+    .mon-item { font-size:13px; color:var(--sub); line-height:1.6; display:flex; gap:8px; align-items:flex-start; }
+    .mon-item::before { content:''; width:5px; height:5px; border-radius:50%; flex-shrink:0; margin-top:6px; background:var(--border2); }
+    .mon-n .mon-item::before { background:var(--navy2); }
+    .mon-t .mon-item::before { background:var(--teal); }
+    /* ── Command split — slide 17 ── */
+    .cmd-split { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px; }
+    .cmd-ic { background:var(--navy); border-radius:4px; padding:24px 22px; display:flex; flex-direction:column; justify-content:center; }
+    .cmd-ic .badge { background:rgba(255,255,255,0.12); color:#e2e8f0; border:1px solid rgba(255,255,255,0.2); margin-bottom:14px; }
+    .cmd-ic h3 { font-size:20px; font-weight:700; color:#fff; margin-bottom:10px; line-height:1.3; }
+    .cmd-ic p { font-size:13px; color:rgba(255,255,255,0.72); line-height:1.7; }
+    .cmd-support { display:flex; flex-direction:column; gap:10px; }
+    .cmd-support .card { flex:1; margin-bottom:0; }
+    /* ── Match layout — slide 20 ── */
+    .match-wrap { display:flex; flex-direction:column; gap:14px; margin-top:8px; }
+    .match-cols { display:grid; grid-template-columns:1fr 1fr; gap:28px; }
+    .match-label { font-size:10px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:rgba(147,197,253,0.8); margin-bottom:14px; display:flex; align-items:center; gap:12px; }
+    .match-label::after { content:''; flex:1; height:1px; background:rgba(147,197,253,0.2); }
+    .match-list { display:flex; flex-direction:column; gap:8px; }
+    .match-row { display:flex; gap:10px; align-items:flex-start; padding:11px 14px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.09); border-radius:3px; }
+    .mr-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; margin-top:5px; }
+    .mr-b { background:#60a5fa; } .mr-t { background:#34d399; } .mr-g { background:#a78bfa; }
+    .match-row p { font-size:13px; color:rgba(255,255,255,0.7); line-height:1.6; margin:0; }
+    .match-row p strong { color:#e2e8f0; font-weight:600; }
+    .match-bar { background:rgba(29,78,216,0.18) !important; border-color:rgba(29,78,216,0.3) !important; border-left-color:#60a5fa !important; color:rgba(255,255,255,0.72) !important; }
+    .match-bar strong { color:#93c5fd !important; }
     /* ── New components ── */
     .ph { color:var(--amber); background:var(--amber-bg); border:1px dashed var(--amber-bd);
       padding:1px 7px; border-radius:2px; font-style:italic; }
@@ -182,6 +259,53 @@
     .ss-col h4 { font-size:13px; font-weight:700; letter-spacing:1px; text-transform:uppercase;
       color:var(--muted); margin-bottom:10px; }
     .ss-col p { font-size:14px; color:var(--sub); line-height:1.75; }
+    /* ── Squad list — horizontal strips with stat ── */
+    .squad-list { display:flex; flex-direction:column; gap:10px; margin-top:8px; }
+    .squad-item { display:flex; border:1px solid var(--border2); border-radius:4px; overflow:hidden; background:var(--white); box-shadow:0 1px 4px rgba(0,0,0,0.04); }
+    .squad-bar { width:4px; flex-shrink:0; }
+    .sb-n { background:var(--navy2); } .sb-t { background:var(--teal); } .sb-g { background:var(--green); }
+    .squad-body { padding:14px 18px; flex:1; }
+    .squad-body h3 { font-size:15px; font-weight:600; color:var(--navy); margin-bottom:4px; line-height:1.3; }
+    .squad-body p { font-size:13px; color:var(--sub); line-height:1.65; }
+    .squad-stat { padding:14px 20px; min-width:80px; text-align:center; background:var(--off);
+      border-left:1px solid var(--border2); display:flex; flex-direction:column; align-items:center; justify-content:center; }
+    .squad-stat .sn { font-size:28px; font-weight:700; line-height:1; color:var(--navy); }
+    .squad-stat .sl { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-top:4px; }
+    /* ── Principle rows — label | title | body ── */
+    .principle-list { display:flex; flex-direction:column; gap:10px; margin-top:10px; }
+    .principle-row { display:grid; grid-template-columns:56px 210px 1fr; align-items:stretch;
+      background:var(--white); border:1px solid var(--border2); border-radius:4px; overflow:hidden;
+      box-shadow:0 1px 4px rgba(0,0,0,0.04); }
+    .pr-num { display:flex; align-items:center; justify-content:center;
+      font-size:18px; font-weight:700; color:#fff; }
+    .pr-n { background:var(--navy2); } .pr-g { background:var(--green); } .pr-t { background:var(--teal); }
+    .pr-title { padding:14px 18px; border-right:1px solid var(--border2);
+      display:flex; flex-direction:column; justify-content:center; }
+    .pr-title strong { font-size:14px; font-weight:700; color:var(--navy); display:block; margin-bottom:3px; }
+    .pr-title span { font-size:10px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--muted); }
+    .pr-body { padding:14px 18px; }
+    .pr-body p { font-size:13px; color:var(--sub); line-height:1.7; }
+    /* ── Layer stack — colored label left, content right ── */
+    .layer-stack { display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+    .layer-item { display:flex; border-radius:4px; overflow:hidden; }
+    .ll { width:130px; flex-shrink:0; padding:16px 14px; display:flex; flex-direction:column; justify-content:center; }
+    .ll-n { background:var(--navy); } .ll-t { background:var(--teal); } .ll-g { background:var(--green); }
+    .ll-tag { font-size:9px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.65); margin-bottom:4px; }
+    .ll-name { font-size:13px; font-weight:700; color:#fff; line-height:1.3; }
+    .lc { flex:1; padding:14px 20px; background:var(--off); border:1px solid var(--border2); border-left:none; }
+    .lc h4 { font-size:14px; font-weight:600; color:var(--navy); margin-bottom:4px; }
+    .lc p { font-size:13px; color:var(--sub); line-height:1.65; }
+    /* ── Tier list — for test strategy ── */
+    .tier-list { display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+    .tier-item { display:flex; border-radius:4px; overflow:hidden; border:1px solid var(--border2); }
+    .tier-label { width:88px; flex-shrink:0; padding:14px 10px; text-align:center;
+      display:flex; flex-direction:column; align-items:center; justify-content:center; }
+    .tl-n { background:var(--navy); } .tl-t { background:var(--teal); } .tl-g { background:var(--green); }
+    .tier-label strong { font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:#fff; display:block; }
+    .tier-label em { font-style:normal; font-size:10px; color:rgba(255,255,255,0.65); margin-top:3px; display:block; }
+    .tier-body { flex:1; padding:14px 20px; background:var(--white); }
+    .tier-body h4 { font-size:14px; font-weight:600; color:var(--navy); margin-bottom:4px; }
+    .tier-body p { font-size:13px; color:var(--sub); line-height:1.65; }
     @media (max-width:600px) {
       #bottombar,#topbar { padding:0 16px; }
       .slide { padding:20px 18px 18px; }
@@ -217,7 +341,7 @@
   <div id="topbar">
     <div class="tb-l">
       <div class="tb-pip"></div>
-      <span class="tb-title">Software Engineering Manager · AirAsia Move</span>
+      <span class="tb-title">Software Engineering Manager</span>
     </div>
     <span class="tb-r" id="chapter-label">Who I Am</span>
   </div>
@@ -231,7 +355,7 @@
     <!-- SLIDE 1 — Title -->
     <div class="slide s-title on" data-i="0" data-chapter="Who I Am">
       <div class="title-left">
-        <div class="overline">Founding Engineering Manager · AirAsia Move</div>
+        <div class="overline">Engineering Manager</div>
         <h1><em>Engineering</em><br/>Manager</h1>
         <p class="lead-lg"><span class="ph">[YOUR NAME]</span> · <span class="ph">[YOUR TITLE]</span><br/>
         Building payment-grade systems and high-performance teams at scale.</p>
@@ -248,7 +372,7 @@
     </div>
 
     <!-- SLIDE 2 — Career Snapshot -->
-    <div class="slide" data-i="1" data-chapter="Who I Am">
+    <div class="slide s-dark" data-i="1" data-chapter="Who I Am">
       <div class="s-head">
         <span class="s-tag">Chapter 1 · Who I Am</span>
         <h2>What I've Built &amp; Led</h2>
@@ -286,7 +410,7 @@
     ════════════════════════════════════ -->
 
     <!-- SLIDE 3 — Architecture -->
-    <div class="slide" data-i="2" data-chapter="Systems I've Built">
+    <div class="slide s-tint" data-i="2" data-chapter="Systems I've Built">
       <div class="s-head">
         <span class="s-tag">Chapter 2 · Systems I've Built</span>
         <h2><span class="ph">[SYSTEM NAME]</span> — Architecture</h2>
@@ -323,7 +447,7 @@
     </div>
 
     <!-- SLIDE 4 — Technical Decisions -->
-    <div class="slide" data-i="3" data-chapter="Systems I've Built">
+    <div class="slide s-geo" data-i="3" data-chapter="Systems I've Built">
       <div class="s-head">
         <span class="s-tag">Chapter 2 · Systems I've Built</span>
         <h2>The Decisions That Mattered</h2>
@@ -354,7 +478,7 @@
     </div>
 
     <!-- SLIDE 5 — The Hard Problem -->
-    <div class="slide" data-i="4" data-chapter="Systems I've Built">
+    <div class="slide s-tint" data-i="4" data-chapter="Systems I've Built">
       <div class="s-head">
         <span class="s-tag">Chapter 2 · Systems I've Built</span>
         <h2><span class="ph">[HARD PROBLEM TITLE]</span></h2>
@@ -376,32 +500,44 @@
     </div>
 
     <!-- SLIDE 6 — Outcomes by Numbers -->
-    <div class="slide" data-i="5" data-chapter="Systems I've Built">
+    <div class="slide s-geo" data-i="5" data-chapter="Systems I've Built">
       <div class="s-head">
         <span class="s-tag">Chapter 2 · Systems I've Built</span>
         <h2>What We Shipped — By the Numbers</h2>
         <p class="lead">Outcomes the team can point to — not effort, not process, results.</p>
       </div>
-      <div class="metrics">
-        <div class="mc">
-          <div class="mv"><span class="ph">[X]</span>K</div>
-          <div class="md"></div>
-          <div class="ml">Peak requests<br/>/ minute</div>
+      <div class="stat-rows">
+        <div class="stat-row-item">
+          <div class="sr-val"><div class="sv"><span class="ph">[X]</span>K</div></div>
+          <div class="sr-body">
+            <h4>Peak Requests / Minute</h4>
+            <p>Sustained under merchant traffic spikes — payment and checkout flows combined.</p>
+          </div>
+          <div class="sr-bar srb-n"></div>
         </div>
-        <div class="mc">
-          <div class="mv"><span class="ph">[X]</span>%</div>
-          <div class="md"></div>
-          <div class="ml">Payment success<br/>rate achieved</div>
+        <div class="stat-row-item">
+          <div class="sr-val"><div class="sv"><span class="ph">[X]</span>%</div></div>
+          <div class="sr-body">
+            <h4>Payment Success Rate</h4>
+            <p>Achieved post-idempotency rollout. SLO held across all payment providers.</p>
+          </div>
+          <div class="sr-bar srb-t"></div>
         </div>
-        <div class="mc">
-          <div class="mv"><span class="ph">[X]</span>ms</div>
-          <div class="md"></div>
-          <div class="ml">p99 API response<br/>time (prod)</div>
+        <div class="stat-row-item">
+          <div class="sr-val"><div class="sv"><span class="ph">[X]</span>ms</div></div>
+          <div class="sr-body">
+            <h4>p99 API Response Time</h4>
+            <p>Measured in production across all endpoints. Regression in p99 blocks release.</p>
+          </div>
+          <div class="sr-bar srb-g"></div>
         </div>
-        <div class="mc">
-          <div class="mv"><span class="ph">[X]</span></div>
-          <div class="md"></div>
-          <div class="ml">Merchants<br/>onboarded</div>
+        <div class="stat-row-item">
+          <div class="sr-val"><div class="sv"><span class="ph">[X]</span></div></div>
+          <div class="sr-body">
+            <h4>Merchants Onboarded</h4>
+            <p>Via self-serve portal — each with correct RBAC auto-assigned in &lt;2 minutes.</p>
+          </div>
+          <div class="sr-bar srb-a"></div>
         </div>
       </div>
       <div class="infobar">
@@ -414,28 +550,49 @@
     ════════════════════════════════════ -->
 
     <!-- SLIDE 7 — Squad Structure -->
-    <div class="slide" data-i="6" data-chapter="Team I've Led">
+    <div class="slide s-geo" data-i="6" data-chapter="Team I've Led">
       <div class="s-head">
         <span class="s-tag">Chapter 3 · Team I've Led</span>
         <h2>How I Structured <span class="ph">[X]</span>+ Engineers</h2>
         <p class="lead">Small, mission-aligned squads with clear ownership — each squad owns its domain end-to-end.</p>
       </div>
       <div class="area">
-        <div class="g3" style="margin-bottom:0;">
-          <div class="card c-navy">
-            <div class="badge bd-n">Squad A</div>
-            <h3><span class="ph">[Squad Name / Mission]</span></h3>
-            <p><span class="ph">[X]</span> engineers · Owns: <span class="ph">[domain, e.g. payments + checkout]</span></p>
+        <div class="squad-list">
+          <div class="squad-item">
+            <div class="squad-bar sb-n"></div>
+            <div class="squad-body">
+              <div class="badge bd-n">Squad A</div>
+              <h3><span class="ph">[Squad Name / Mission]</span></h3>
+              <p>Owns: <span class="ph">[domain, e.g. payments + checkout]</span></p>
+            </div>
+            <div class="squad-stat">
+              <div class="sn"><span class="ph">[X]</span></div>
+              <div class="sl">engineers</div>
+            </div>
           </div>
-          <div class="card c-teal">
-            <div class="badge bd-t">Squad B</div>
-            <h3><span class="ph">[Squad Name / Mission]</span></h3>
-            <p><span class="ph">[X]</span> engineers · Owns: <span class="ph">[domain, e.g. merchant portal + RBAC]</span></p>
+          <div class="squad-item">
+            <div class="squad-bar sb-t"></div>
+            <div class="squad-body">
+              <div class="badge bd-t">Squad B</div>
+              <h3><span class="ph">[Squad Name / Mission]</span></h3>
+              <p>Owns: <span class="ph">[domain, e.g. merchant portal + RBAC]</span></p>
+            </div>
+            <div class="squad-stat">
+              <div class="sn"><span class="ph">[X]</span></div>
+              <div class="sl">engineers</div>
+            </div>
           </div>
-          <div class="card c-green">
-            <div class="badge bd-g">Squad C</div>
-            <h3><span class="ph">[Squad Name / Mission]</span></h3>
-            <p><span class="ph">[X]</span> engineers · Owns: <span class="ph">[domain, e.g. data / AI / platform]</span></p>
+          <div class="squad-item">
+            <div class="squad-bar sb-g"></div>
+            <div class="squad-body">
+              <div class="badge bd-g">Squad C</div>
+              <h3><span class="ph">[Squad Name / Mission]</span></h3>
+              <p>Owns: <span class="ph">[domain, e.g. data / AI / platform]</span></p>
+            </div>
+            <div class="squad-stat">
+              <div class="sn"><span class="ph">[X]</span></div>
+              <div class="sl">engineers</div>
+            </div>
           </div>
         </div>
         <div class="infobar">
@@ -449,7 +606,7 @@
       <div class="s-head">
         <span class="s-tag">Chapter 3 · Team I've Led</span>
         <h2>Hiring for a Founding Team</h2>
-        <p class="lead">For AirAsia Move: 4 engineers across backend, infra, and data. The bar is different when every hire shapes the team's culture and technical direction.</p>
+        <p class="lead">For <span class="ph">[COMPANY]</span>: <span class="ph">[X]</span> engineers across <span class="ph">[backend, infra, data — adjust per role]</span>. The bar is different when every hire shapes the team's culture and technical direction.</p>
       </div>
       <div class="tl">
         <div class="tl-row">
@@ -484,28 +641,43 @@
     </div>
 
     <!-- SLIDE 9 — Engineering Culture -->
-    <div class="slide" data-i="8" data-chapter="Team I've Led">
+    <div class="slide s-tint" data-i="8" data-chapter="Team I've Led">
       <div class="s-head">
         <span class="s-tag">Chapter 3 · Team I've Led</span>
         <h2>The Culture I Installed</h2>
         <p class="lead">Culture is what the team does when the manager isn't in the room. These three practices became team defaults — not policies, habits.</p>
       </div>
       <div class="area">
-        <div class="g3" style="margin-bottom:0;">
-          <div class="card c-navy">
-            <div class="badge bd-n">Deploy Culture</div>
-            <h3>Ship Small, Ship Often</h3>
-            <p>Feature flags on every risky change. No big-bang releases. Deployments are boring by design — if a deploy causes stress, we fix the pipeline, not the team's nerve.</p>
+        <div class="principle-list">
+          <div class="principle-row">
+            <div class="pr-num pr-n">01</div>
+            <div class="pr-title">
+              <span>Deploy Culture</span>
+              <strong>Ship Small, Ship Often</strong>
+            </div>
+            <div class="pr-body">
+              <p>Feature flags on every risky change. No big-bang releases. Deployments are boring by design — if a deploy causes stress, we fix the pipeline, not the team's nerve.</p>
+            </div>
           </div>
-          <div class="card c-green">
-            <div class="badge bd-g">Quality Gates</div>
-            <h3>Quality is a Pipeline Problem</h3>
-            <p>Code review for design, not typos. Tests gate the pipeline — not optional, not skippable. Engineers own the quality of what they ship, not a separate QA team.</p>
+          <div class="principle-row">
+            <div class="pr-num pr-g">02</div>
+            <div class="pr-title">
+              <span>Quality Gates</span>
+              <strong>Quality is a Pipeline Problem</strong>
+            </div>
+            <div class="pr-body">
+              <p>Code review for design, not typos. Tests gate the pipeline — not optional, not skippable. Engineers own the quality of what they ship, not a separate QA team.</p>
+            </div>
           </div>
-          <div class="card c-teal">
-            <div class="badge bd-t">Incident Culture</div>
-            <h3>Blameless by Default</h3>
-            <p>Post-mortems within 24 hours, always. No names in root-cause sections. Every incident produces at least one structural improvement — tracked as a GitLab issue.</p>
+          <div class="principle-row">
+            <div class="pr-num pr-t">03</div>
+            <div class="pr-title">
+              <span>Incident Culture</span>
+              <strong>Blameless by Default</strong>
+            </div>
+            <div class="pr-body">
+              <p>Post-mortems within 24 hours, always. No names in root-cause sections. Every incident produces at least one structural improvement — tracked as a GitLab issue.</p>
+            </div>
           </div>
         </div>
         <div class="infobar">
@@ -519,7 +691,7 @@
     ════════════════════════════════════ -->
 
     <!-- SLIDE 10 — Idempotency: Problem -->
-    <div class="slide" data-i="9" data-chapter="Hard Problems">
+    <div class="slide s-geo" data-i="9" data-chapter="Hard Problems">
       <div class="s-head">
         <span class="s-tag">Chapter 4 · Hard Problems</span>
         <h2>Exactly-Once Payment Processing</h2>
@@ -543,33 +715,29 @@
     </div>
 
     <!-- SLIDE 11 — Idempotency: Solution -->
-    <div class="slide" data-i="10" data-chapter="Hard Problems">
+    <div class="slide s-tint" data-i="10" data-chapter="Hard Problems">
       <div class="s-head">
         <span class="s-tag">Chapter 4 · Hard Problems</span>
         <h2>The Idempotency Solution</h2>
         <p class="lead">A client-generated key that survives retries, provider failures, and network partitions — making every payment operation safe to replay.</p>
       </div>
-      <div class="tl">
-        <div class="tl-row">
-          <div class="tl-l"><div class="tl-chip tc-b">Key</div><div class="tl-wire"></div></div>
-          <div class="tl-body">
-            <h4>Client-Generated Idempotency Key</h4>
-            <p>UUID v4 generated at the client for each payment intent. Stored with TTL in Redis. Any retry with the same key returns the cached result — the provider is never hit twice.</p>
-          </div>
+      <div class="h-flow">
+        <div class="hf-card">
+          <span class="hf-step">Step 1 — Key</span>
+          <h4>Client-Generated Idempotency Key</h4>
+          <p>UUID v4 generated at the client for each payment intent. Stored with TTL in Redis. Any retry with the same key returns the cached result — the provider is never hit twice.</p>
         </div>
-        <div class="tl-row">
-          <div class="tl-l"><div class="tl-chip tc-a">State</div><div class="tl-wire"></div></div>
-          <div class="tl-body">
-            <h4>Explicit Payment State Machine</h4>
-            <p>PENDING → PROCESSING → SUCCEEDED / FAILED. State transitions are atomic via DB transaction. Any request arriving in PROCESSING state waits — never duplicates.</p>
-          </div>
+        <div class="hf-arrow">›</div>
+        <div class="hf-card">
+          <span class="hf-step">Step 2 — State</span>
+          <h4>Explicit Payment State Machine</h4>
+          <p>PENDING → PROCESSING → SUCCEEDED / FAILED. State transitions are atomic via DB transaction. Any request arriving in PROCESSING state waits — never duplicates.</p>
         </div>
-        <div class="tl-row">
-          <div class="tl-l"><div class="tl-chip tc-g">Verify</div></div>
-          <div class="tl-body">
-            <h4>Async Reconciliation as Safety Net</h4>
-            <p>Nightly reconciliation job compares our state against provider records. Catches any gap that slipped through — surfaces discrepancies before finance close, not after.</p>
-          </div>
+        <div class="hf-arrow">›</div>
+        <div class="hf-card">
+          <span class="hf-step">Step 3 — Verify</span>
+          <h4>Async Reconciliation as Safety Net</h4>
+          <p>Nightly reconciliation job compares our state against provider records. Catches any gap — surfaces discrepancies before finance close, not after.</p>
         </div>
       </div>
       <div class="infobar">
@@ -578,7 +746,7 @@
     </div>
 
     <!-- SLIDE 12 — RBAC: Problem -->
-    <div class="slide" data-i="11" data-chapter="Hard Problems">
+    <div class="slide s-tint" data-i="11" data-chapter="Hard Problems">
       <div class="s-head">
         <span class="s-tag">Chapter 4 · Hard Problems</span>
         <h2>RBAC at Scale — <span class="ph">[X]</span> Merchants, <span class="ph">[X]</span> Role Variants</h2>
@@ -602,27 +770,42 @@
     </div>
 
     <!-- SLIDE 13 — RBAC: Solution -->
-    <div class="slide" data-i="12" data-chapter="Hard Problems">
+    <div class="slide s-geo" data-i="12" data-chapter="Hard Problems">
       <div class="s-head">
         <span class="s-tag">Chapter 4 · Hard Problems</span>
         <h2>Role Hierarchy That Actually Scaled</h2>
         <p class="lead">A three-layer model: global roles define capability, tenant roles scope it, resource permissions enforce it — evaluated at every API call.</p>
       </div>
-      <div class="g3" style="margin-bottom:0;">
-        <div class="card c-navy">
-          <div class="badge bd-n">Layer 1 — Global</div>
-          <h3>Capability Roles</h3>
-          <p>Platform-level roles define what a user type <em>can</em> do: ADMIN, MERCHANT_OWNER, MERCHANT_STAFF, AGENT. No tenant context — pure capability definition.</p>
+      <div class="layer-stack">
+        <div class="layer-item">
+          <div class="ll ll-n">
+            <div class="ll-tag">Layer 1 — Global</div>
+            <div class="ll-name">Capability Roles</div>
+          </div>
+          <div class="lc">
+            <h4>Platform-Wide Role Definitions</h4>
+            <p>Platform-level roles define what a user type <em>can</em> do: ADMIN, MERCHANT_OWNER, MERCHANT_STAFF, AGENT. No tenant context — pure capability definition.</p>
+          </div>
         </div>
-        <div class="card c-teal">
-          <div class="badge bd-t">Layer 2 — Tenant</div>
-          <h3>Tenant-Scoped Assignment</h3>
-          <p>Role assignment always carries a tenant_id. A user can be MERCHANT_OWNER at tenant A and MERCHANT_STAFF at tenant B. Cross-tenant access is architecturally impossible.</p>
+        <div class="layer-item">
+          <div class="ll ll-t">
+            <div class="ll-tag">Layer 2 — Tenant</div>
+            <div class="ll-name">Scoped Assignment</div>
+          </div>
+          <div class="lc">
+            <h4>Tenant-Scoped Role Assignment</h4>
+            <p>Role assignment always carries a tenant_id. A user can be MERCHANT_OWNER at tenant A and MERCHANT_STAFF at tenant B. Cross-tenant access is architecturally impossible.</p>
+          </div>
         </div>
-        <div class="card c-green">
-          <div class="badge bd-g">Layer 3 — Resource</div>
-          <h3>Permission Enforcement at API Layer</h3>
-          <p>Every endpoint declares required permissions. Middleware resolves: user → tenant-scoped role → permissions → allow/deny. Fully audited, cached in Redis per session.</p>
+        <div class="layer-item">
+          <div class="ll ll-g">
+            <div class="ll-tag">Layer 3 — Resource</div>
+            <div class="ll-name">Permission Enforcement</div>
+          </div>
+          <div class="lc">
+            <h4>API-Layer Permission Check</h4>
+            <p>Every endpoint declares required permissions. Middleware resolves: user → tenant-scoped role → permissions → allow/deny. Fully audited, cached in Redis per session.</p>
+          </div>
         </div>
       </div>
       <div class="infobar" style="margin-top:12px;">
@@ -635,7 +818,7 @@
     ════════════════════════════════════ -->
 
     <!-- SLIDE 14 — CI/CD -->
-    <div class="slide" data-i="13" data-chapter="Engineering Foundation">
+    <div class="slide s-geo" data-i="13" data-chapter="Engineering Foundation">
       <div class="s-head">
         <span class="s-tag">Chapter 5 · Engineering Foundation</span>
         <h2>Pipeline That Made Deploys Boring</h2>
@@ -677,22 +860,42 @@
     </div>
 
     <!-- SLIDE 15 — Observability -->
-    <div class="slide" data-i="14" data-chapter="Engineering Foundation">
+    <div class="slide s-tint" data-i="14" data-chapter="Engineering Foundation">
       <div class="s-head">
         <span class="s-tag">Chapter 5 · Engineering Foundation</span>
         <h2>Knowing Before Customers Do</h2>
         <p class="lead">Two observability layers: Datadog for backend APM and alerting, New Relic for frontend and synthetic coverage.</p>
       </div>
-      <div class="g2">
-        <div class="card c-navy">
-          <div class="badge bd-n">Datadog — Backend</div>
-          <h3>APM + Distributed Tracing</h3>
-          <p>Every payment flow traced end-to-end. Dashboards per squad — each team owns its SLO widget. Alerts routed to PagerDuty with severity levels. Log correlation to trace ID standard.</p>
+      <div class="mon-stack">
+        <div class="mon-col mon-n">
+          <div class="mon-tool">
+            <div class="mt-logo mt-n">DD</div>
+            <div>
+              <div class="mt-name">Datadog</div>
+              <div class="mt-role">Backend · APM · Alerting</div>
+            </div>
+          </div>
+          <div class="mon-items">
+            <div class="mon-item">Every payment flow traced end-to-end via distributed tracing</div>
+            <div class="mon-item">Squad dashboards — each team owns its SLO widget</div>
+            <div class="mon-item">Alerts routed to PagerDuty with P1/P2 severity tiers</div>
+            <div class="mon-item">Log correlation to trace ID enforced as team standard</div>
+          </div>
         </div>
-        <div class="card c-teal">
-          <div class="badge bd-t">New Relic — Frontend</div>
-          <h3>Synthetics + Browser</h3>
-          <p>Synthetic monitors on all critical user journeys (checkout, login, merchant onboarding). Browser RUM tracks real-user performance. Catches frontend regressions before APM does.</p>
+        <div class="mon-col mon-t">
+          <div class="mon-tool">
+            <div class="mt-logo mt-t">NR</div>
+            <div>
+              <div class="mt-name">New Relic</div>
+              <div class="mt-role">Frontend · Synthetics · RUM</div>
+            </div>
+          </div>
+          <div class="mon-items">
+            <div class="mon-item">Synthetic monitors on critical journeys: checkout, login, onboarding</div>
+            <div class="mon-item">Browser RUM tracks real-user performance against SLOs</div>
+            <div class="mon-item">Catches frontend regressions before backend APM does</div>
+            <div class="mon-item">Integrated alert view alongside Datadog for full-stack incidents</div>
+          </div>
         </div>
       </div>
       <div class="infobar">
@@ -708,21 +911,36 @@
         <p class="lead">Three layers with different purposes — not coverage theatre, but confidence at each integration boundary.</p>
       </div>
       <div class="area">
-        <div class="g3" style="margin-bottom:0;">
-          <div class="card c-navy">
-            <div class="badge bd-n">Layer 1 — Unit</div>
-            <h3>Business Logic Isolation</h3>
-            <p>Payment calculations, RBAC evaluation, idempotency key logic. Fast, deterministic, runs on every commit. No I/O — pure domain logic. Target: &gt;80% coverage on core modules.</p>
+        <div class="tier-list">
+          <div class="tier-item">
+            <div class="tier-label tl-n">
+              <strong>Unit</strong>
+              <em>Layer 1</em>
+            </div>
+            <div class="tier-body">
+              <h4>Business Logic Isolation</h4>
+              <p>Payment calculations, RBAC evaluation, idempotency key logic. Fast, deterministic, runs on every commit. No I/O — pure domain logic. Target: &gt;80% coverage on core modules.</p>
+            </div>
           </div>
-          <div class="card c-teal">
-            <div class="badge bd-t">Layer 2 — Contract</div>
-            <h3>API Contracts (Pact)</h3>
-            <p>Consumer-driven contracts between our payment service and provider adapters. Catches breaking changes before staging deploy. Runs on every MR — no integration environment needed.</p>
+          <div class="tier-item">
+            <div class="tier-label tl-t">
+              <strong>Contract</strong>
+              <em>Layer 2</em>
+            </div>
+            <div class="tier-body">
+              <h4>API Contracts (Pact)</h4>
+              <p>Consumer-driven contracts between our payment service and provider adapters. Catches breaking changes before staging deploy. Runs on every MR — no integration environment needed.</p>
+            </div>
           </div>
-          <div class="card c-green">
-            <div class="badge bd-g">Layer 3 — Load</div>
-            <h3>Performance Under Pressure</h3>
-            <p>k6 load tests simulate merchant traffic spikes. Run weekly and before major releases. Baseline: payment flow at 10× normal load. Any regression in p99 blocks the release.</p>
+          <div class="tier-item">
+            <div class="tier-label tl-g">
+              <strong>Load</strong>
+              <em>Layer 3</em>
+            </div>
+            <div class="tier-body">
+              <h4>Performance Under Pressure</h4>
+              <p>k6 load tests simulate merchant traffic spikes. Run weekly and before major releases. Baseline: payment flow at 10× normal load. Any regression in p99 blocks the release.</p>
+            </div>
           </div>
         </div>
         <div class="infobar">
@@ -743,33 +961,35 @@
         <p class="lead">Clear role assignment within the first two minutes eliminates confusion under pressure. Everyone has exactly one job.</p>
       </div>
       <div class="area">
-        <div class="g2">
-          <div class="card c-navy">
-            <div class="badge bd-n">Incident Commander</div>
+        <div class="cmd-split">
+          <div class="cmd-ic">
+            <div class="badge">Incident Commander</div>
             <h3>Engineering Manager</h3>
             <p>Owns the timeline, decisions, and escalation path. Does not debug. Keeps the team unblocked and communicates on a strict 10-minute cadence to all stakeholders.</p>
           </div>
-          <div class="card c-teal">
-            <div class="badge bd-t">Technical Lead</div>
-            <h3>Senior / Staff Engineer</h3>
-            <p>Drives root cause analysis and owns the technical fix. Deploys via GitLab pipeline. Reports status to Incident Commander at every decision point.</p>
-          </div>
-          <div class="card c-amber">
-            <div class="badge bd-a">Comms Lead</div>
-            <h3>EM or Designated Engineer</h3>
-            <p>Single source of truth for product, operations, and leadership. Owns Slack updates and status page. Never contradicts the Incident Commander.</p>
-          </div>
-          <div class="card c-grey">
-            <div class="badge bd-s">Scribe</div>
-            <h3>Any Assigned Engineer</h3>
-            <p>Logs every action with exact timestamps in real time. This document is the raw input for the post-mortem. No detail is too small to capture.</p>
+          <div class="cmd-support">
+            <div class="card c-teal">
+              <div class="badge bd-t">Technical Lead</div>
+              <h3>Senior / Staff Engineer</h3>
+              <p>Drives root cause analysis and owns the technical fix. Deploys via pipeline. Reports status to IC at every decision point.</p>
+            </div>
+            <div class="card c-amber">
+              <div class="badge bd-a">Comms Lead</div>
+              <h3>EM or Designated Engineer</h3>
+              <p>Single source of truth for product, ops, and leadership. Owns Slack updates and status page.</p>
+            </div>
+            <div class="card c-grey">
+              <div class="badge bd-s">Scribe</div>
+              <h3>Any Assigned Engineer</h3>
+              <p>Logs every action with exact timestamps. This document is the raw input for the post-mortem.</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <!-- SLIDE 18 — Incident Timeline -->
-    <div class="slide" data-i="17" data-chapter="Critical Incidents">
+    <div class="slide s-tint" data-i="17" data-chapter="Critical Incidents">
       <div class="s-head">
         <span class="s-tag">Chapter 6 · Critical Incidents</span>
         <h2>Incident Response Timeline</h2>
@@ -808,7 +1028,7 @@
     </div>
 
     <!-- SLIDE 19 — Post-Mortem -->
-    <div class="slide" data-i="18" data-chapter="Critical Incidents">
+    <div class="slide s-geo" data-i="18" data-chapter="Critical Incidents">
       <div class="s-head">
         <span class="s-tag">Chapter 6 · Critical Incidents</span>
         <h2>Blameless Post-Mortem</h2>
@@ -843,31 +1063,32 @@
     ════════════════════════════════════ -->
 
     <!-- SLIDE 20 — Why AirAsia Move -->
-    <div class="slide" data-i="19" data-chapter="Why This Role">
+    <div class="slide s-dark s-geo" data-i="19" data-chapter="Why This Role">
       <div class="s-head">
         <span class="s-tag">Closing · Why This Role</span>
         <h2>The Right Match</h2>
-        <p class="lead">Building a travel aggregation platform at AirAsia Move requires the same discipline as payment systems — reliability, multi-tenancy, and real-time correctness. I've built all three.</p>
+        <p class="lead">Building <span class="ph">[COMPANY'S PRODUCT]</span> requires the same discipline as payment systems — reliability, multi-tenancy, and real-time correctness. I've built all three.</p>
       </div>
-      <div class="area">
-        <div class="g3" style="margin-bottom:0;">
-          <div class="card c-navy">
-            <div class="badge bd-n">What I've Done</div>
-            <h3>Payment-Grade Systems</h3>
-            <p>Built multi-tenant B2B portals, exactly-once payment processing, and RBAC at scale. Led <span class="ph">[X]</span>+ engineers across <span class="ph">[X]</span> squads from founding to growth stage.</p>
+      <div class="match-wrap">
+        <div class="match-cols">
+          <div>
+            <div class="match-label">What I Bring</div>
+            <div class="match-list">
+              <div class="match-row"><div class="mr-dot mr-b"></div><p><strong>Payment-grade reliability</strong> — multi-tenant B2B portals, exactly-once processing, RBAC at scale</p></div>
+              <div class="match-row"><div class="mr-dot mr-t"></div><p><strong>Founding team experience</strong> — led <span class="ph">[X]</span>+ engineers across <span class="ph">[X]</span> squads from first hire to growth stage</p></div>
+              <div class="match-row"><div class="mr-dot mr-g"></div><p><strong>Engineering culture</strong> — deploys with confidence, blameless post-mortems, DORA metrics ownership</p></div>
+            </div>
           </div>
-          <div class="card c-teal">
-            <div class="badge bd-t">What This Role Needs</div>
-            <h3>Founding EM for Travel Platform</h3>
-            <p>Set the technical foundation, hire 4 engineers, deliver a multi-airline + hotel aggregation backend serving AirAsia Move and B2B travel agent portal.</p>
-          </div>
-          <div class="card c-green">
-            <div class="badge bd-g">The Overlap</div>
-            <h3>Directly Transferable</h3>
-            <p>Multi-source aggregation mirrors multi-tenant isolation. B2B Agent Portal = Merchant Portal. Travel booking idempotency = Payment idempotency. Same hard problems, new domain.</p>
+          <div>
+            <div class="match-label">What This Role Needs</div>
+            <div class="match-list">
+              <div class="match-row"><div class="mr-dot mr-b"></div><p><span class="ph">[Key technical requirement — e.g. real-time aggregation, multi-source reliability]</span></p></div>
+              <div class="match-row"><div class="mr-dot mr-t"></div><p><span class="ph">[Team mandate — e.g. hire and structure founding team of X engineers]</span></p></div>
+              <div class="match-row"><div class="mr-dot mr-g"></div><p><span class="ph">[Platform requirement — e.g. B2B portal, agent access, multi-tenant isolation]</span></p></div>
+            </div>
           </div>
         </div>
-        <div class="infobar">
+        <div class="infobar match-bar">
           <strong>What I'm bringing:</strong> A team that deploys with confidence, a system that fails gracefully, and an engineering culture that improves after every incident.
         </div>
       </div>
@@ -950,7 +1171,7 @@
       slide.style.width=pageW+'px'; slide.style.height='auto';
       slide.style.justifyContent='flex-start'; slide.style.overflowY='visible';
       await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
-      const pageH = Math.round(slide.offsetHeight);
+      const pageH = Math.max(Math.round(slide.offsetHeight), Math.round(deckRect.height));
       slide.style.position='absolute'; slide.style.inset='auto';
       slide.style.top='0'; slide.style.left='0';
       slide.style.width=pageW+'px'; slide.style.height=pageH+'px';
