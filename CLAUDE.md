@@ -47,18 +47,7 @@ Original Module 9 deck. Kept for reference. Slides 17–19 originally derived fr
 - **Scale awareness**: Keep Section 6 lean and startup-appropriate — no war rooms, no P1 runbooks. Show you know how to operate at 4-engineer scale, not 40.
 
 ## Remaining Placeholders
-Search for `[` in the file to find them.
-
-| Placeholder | Slide | What to fill |
-|---|---|---|
-| [YOUR NAME] | 1 | Your full name |
-| [YOUR TITLE] | 1 | Current/most recent title |
-| [YOUR COMPANY] | 1 | Company name |
-| [COMPANY/PRODUCT] | 9, 11 | Where payment idempotency / RBAC problems occurred |
-| [YOUR SLOS] | 14 | Actual SLOs you held the team to |
-| [COMPANY'S PRODUCT] | 19 | One-phrase description of what AirAsia is building |
-| [ROLE TITLE AT COMPANY] | 19 | e.g. "Founding EM for Travel Platform" |
-| [What this role delivers] | 19 | Team size, product scope, technical mandate |
+No open placeholders. Slide 19 (closing) uses general language — reusable across roles.
 
 ## Build Notes
 - Template system: Inter + DM Serif Display fonts, CSS custom properties, card/grid/timeline components
