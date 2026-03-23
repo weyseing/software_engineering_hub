@@ -26,7 +26,7 @@ The interviewer will interrupt and dig in. That is expected and good.
 
 > Note: AirAsia Move is a client app that connects to your product — you are under AirAsia (the parent), not under AirAsia Move.
 
-### Single file: `slides/interview-prep.html`
+### Single file: `slides/slides-app.html`
 20 slides across 6 chapters. One continuous deck.
 
 | Chapter | Slides | Content |
@@ -36,11 +36,15 @@ The interviewer will interrupt and dig in. That is expected and good.
 | 3. Team I've Led | 7–9 | Squad structure, hiring approach, culture installed |
 | 4. Hard Problems | 10–13 | Payment idempotency (2 slides) + RBAC at scale (2 slides) |
 | 5. Engineering Foundation | 14–16 | CI/CD pipeline, observability, test strategy |
-| 6. Critical Incidents | 17–19 | War room, response timeline, post-mortem |
+| 6. Founding Team Setup | 17–19 | Technical foundation (Day 1–30), Building the team (hire sequence & what to look for), First 90 days to first production ship |
 | Closing | 20 | Why this role — experience mapped to AirAsia Founding EM |
 
 ### Archived: `slides/module9-critical-incidents.html`
-Original Module 9 deck. Kept for reference. Slides 17–19 in interview-prep.html are derived from it.
+Original Module 9 deck. Kept for reference. Slides 17–19 originally derived from it — replaced with Founding Team Setup section.
+
+## Framing Notes
+- **Team hiring**: It is unclear whether the EM directly hires the 4 engineers or whether the Head of Engineering owns hiring decisions. Frame slides as "building/structuring the team" and "what I look for" rather than "I hire". Avoid claiming direct hire authority.
+- **Scale awareness**: Keep Section 6 lean and startup-appropriate — no war rooms, no P1 runbooks. Show you know how to operate at 4-engineer scale, not 40.
 
 ## Placeholders to Fill In
 All placeholders are highlighted in amber in the slides. Search for `[` to find them.
